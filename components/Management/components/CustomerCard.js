@@ -18,7 +18,9 @@ export default function CustomerCard({ user }) {
               {user.amount}
               <FaDollarSign />
             </div>
+            <div>{user.otptimes} OTP</div>
             <div>
+              {user.ordertimes}
               <FaTruck />
             </div>
           </div>

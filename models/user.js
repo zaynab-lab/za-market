@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     otp: { type: String, require: true },
     date: { type: Date, default: Date.now },
     otptimes: { type: Number },
+    ordertimes: { type: Number, default: 0 },
     jwt: { type: String },
     amount: { type: Number, default: 5000 },
     roles: { type: [String], default: ["customer"] },

@@ -56,6 +56,7 @@ export default async (req, res) => {
               userID: user._id,
               userName: user.name,
               orderCode: body.orderCode,
+              ordertimes: user.ordertimes + 1,
               number: user.number,
               products: body.proceedProducts,
               delivery: body.delivery,
