@@ -49,7 +49,7 @@ export default function EditProduct({ add, product, refresh, GM }) {
           );
         }
       };
-      axios
+      await axios
         .post(
           `/api/products/id/uploadImg?id=${id}&category=${category}`,
           formData,
