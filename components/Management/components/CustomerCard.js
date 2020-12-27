@@ -11,17 +11,27 @@ export default function CustomerCard({ user }) {
             <div className="userName">
               <div>{user.name && user.name}</div>
               <div className="userNumber">{user.number}</div>
+              <div className="userNumber">
+                {"الإستعمال " + user.workingtimes}
+              </div>
             </div>
           </div>
           <div className="userControll">
             <div>
               {user.amount}
-              <FaDollarSign />
+              <span className="icon">
+                <FaDollarSign />
+              </span>
             </div>
-            <div>{user.otptimes} OTP</div>
+            <div>
+              {user.otptimes}
+              <span className="icon">OTP</span>
+            </div>
             <div>
               {user.ordertimes}
-              <FaTruck />
+              <span className="icon">
+                <FaTruck />
+              </span>
             </div>
           </div>
         </div>
@@ -59,6 +69,12 @@ export default function CustomerCard({ user }) {
 
         .img {
           width: 4rem;
+        }
+        .icon {
+          margin: auto 0.3rem;
+          width: 1rem;
+          font-size: 0.9rem;
+          color: ${styles.secondaryColor};
         }
       `}</style>
     </>

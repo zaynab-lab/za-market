@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     otptimes: { type: Number },
     ordertimes: { type: Number, default: 0 },
+    workingtimes: { type: Number, default: 1 },
     jwt: { type: String },
     amount: { type: Number, default: 5000 },
     roles: { type: [String], default: ["customer"] },

@@ -13,6 +13,12 @@ export default async function Auth(req, res) {
       console.log(token);
       if (err) return res.end("invalid");
       const user = await User.findById(decoded.id).exec();
+      User.findByIdAndUpdate(
+        user._id,
+        { workingtimes: user.workingtimes + 1 },
+        (err) => console.log(err)
+      );
+
       return res.end(
         JSON.stringify({
           name: user.name,
