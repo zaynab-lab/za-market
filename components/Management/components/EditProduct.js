@@ -197,7 +197,7 @@ export default function EditProduct({ add, product, refresh, GM }) {
                       .then(async (res) => {
                         const { data } = res;
                         data === "done" &&
-                          (await upload(product._id, product.category));
+                          upload(product._id, product.category);
                       })
                       .then(() => refresh(product._id, "update", state));
               } else {
