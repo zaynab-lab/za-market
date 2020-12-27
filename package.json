@@ -1,0 +1,37 @@
+{
+  "name": "nextjs",
+  "homepage": "za-market.com",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "post-update": "yarn upgrade --latest"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "5.7.0",
+    "axios": "0.21.0",
+    "bcryptjs": "2.4.3",
+    "cookie": "0.4.1",
+    "formidable": "1.2.2",
+    "jsonwebtoken": "8.5.1",
+    "mongoose": "5.11.2",
+    "next": "latest",
+    "node-fetch": "2.6.1",
+    "qs": "6.9.4",
+    "react": "^16.13.1",
+    "react-content-loader": "5.1.4",
+    "react-dom": "^16.13.1",
+    "react-icons": "4.1.0",
+    "recoil": "0.1.2",
+    "twilio": "3.54.0"
+  },
+  "peerOptionalDependencies": {
+    "mongodb": "^3.6.2"
+  },
+  "license": "MIT",
+  "keywords": [
+    "next"
+  ],
+  "description": "A \"Hello World\" application with multiple pages that shows how Next.js routing works."
+}
