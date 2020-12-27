@@ -109,20 +109,19 @@ export default function Orders({ current, orderList }) {
   const [currentList, setCurrentList] = useState([]);
 
   useEffect(() => {
-    setCurrentList([]);
     current
       ? setCurrentList(
           orderList.filter(
             (obj) =>
-              obj.progress.cancelation.done === !current &&
-              obj.progress.arrive.done === !current
+              obj.progress.cancelation.done !== current &&
+              obj.progress.arrive.done !== current
           )
         )
       : setCurrentList(
           orderList.filter(
             (obj) =>
-              obj.progress.arrive.done === current ||
-              obj.progress.cancelation.done === current
+              obj.progress.arrive.done !== current ||
+              obj.progress.cancelation.done !== current
           )
         );
   }, [orderList, current]);
@@ -133,8 +132,8 @@ export default function Orders({ current, orderList }) {
         <ContentLoad />
       ) : (
         <>
-          {currentList.map((obj, index) => (
-            <OrderItem key={index} currentList={obj} />
+          {currentList.map((obj) => (
+            <OrderItem key={obj.orderCode} currentList={obj} />
           ))}
         </>
       )}

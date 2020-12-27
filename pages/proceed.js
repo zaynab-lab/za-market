@@ -20,6 +20,7 @@ export default function Proceed() {
   const [dots, setDots] = useState(false);
   const [total, setTotal] = useState(0);
   const [delivery, setDelivery] = useState(3000);
+  const [discount, setDiscount] = useState();
   const [productList, setProductList] = useState([]);
   const [proceedProducts, setProceedProducts] = useState([]);
   const [payment, setPayment] = useState("عند الإستلام");
@@ -95,9 +96,11 @@ export default function Proceed() {
                   <span>اجرة التوصيل</span>{" "}
                   <span className="price">{delivery} </span>{" "}
                 </div>
-                <div>
-                  <span>الخصم</span> <span className="price">- </span>{" "}
-                </div>
+                {discount && (
+                  <div>
+                    <span>الخصم</span> <span className="price">- </span>{" "}
+                  </div>
+                )}
                 <div className="bill-total">
                   <span>الإجمالي النهائي</span>{" "}
                   <span className="price">{total + delivery} </span>{" "}
@@ -136,7 +139,9 @@ export default function Proceed() {
                 <span className="label">
                   الدفع من الرصيد:{" "}
                   <span className="amount">
-                    {user.amount - (toggle && total + delivery)}
+                    {user.amount - (toggle && total + delivery) > 0
+                      ? user.amount - (toggle && total + delivery)
+                      : 0}
                   </span>
                 </span>
                 <Switch />
@@ -165,6 +170,7 @@ export default function Proceed() {
                         : fire("اختر العنوان المطلوب الإرسال إليه");
                     } else {
                       setDots(true);
+                      const newOrderCode = orderCode();
                       axios
                         .post(
                           "/api/orders",
@@ -175,7 +181,7 @@ export default function Proceed() {
                             selectedAddress,
                             toggle,
                             delivery,
-                            orderCode
+                            orderCode: newOrderCode
                           },
                           { "content-type": "application/json" }
                         )

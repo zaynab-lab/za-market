@@ -23,16 +23,16 @@ const CataItem = ({ title, name }) => {
   return (
     <>
       <Link href={`/${name}`}>
-        <div className="container" onClick={() => setLoading(true)}>
+        <div className="coverContainer" onClick={() => setLoading(true)}>
           <div className="icon">
             {name ? <Cover name={name} /> : <ContentLoad />}
           </div>
           <div className="title">{title}</div>
         </div>
       </Link>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       <style jsx>{`
-        .container {
+        .coverContainer {
           border: 1.5px solid ${styles.primaryColor};
           margin: 0.3rem;
           padding: 0.3rem 0.5rem;
@@ -50,6 +50,8 @@ const CataItem = ({ title, name }) => {
           -webkit-box-flex: 1;
           -ms-flex: 1 1 150px;
           flex: 1 1 150px;
+          box-shadow: ${loading &&
+          "0px 0px 6px 0px " + styles.primaryColorLight};
         }
 
         .title {
