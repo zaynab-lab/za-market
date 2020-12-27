@@ -49,7 +49,7 @@ export default function EditProduct({ add, product, refresh, GM }) {
           );
         }
       };
-      await axios
+      axios
         .post(
           `/api/products/id/uploadImg?id=${id}&category=${category}`,
           formData,
@@ -194,10 +194,10 @@ export default function EditProduct({ add, product, refresh, GM }) {
                         { ...state },
                         config
                       )
-                      .then((res) => {
+                      .then(async (res) => {
                         const { data } = res;
                         data === "done" &&
-                          upload(product._id, product.category);
+                          (await upload(product._id, product.category));
                       })
                       .then(() => refresh(product._id, "update", state));
               } else {
