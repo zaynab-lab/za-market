@@ -97,6 +97,7 @@ export default function ProductsPage() {
                 setActionById={setActionById.bind(this)}
                 key={index}
                 product={obj}
+                role={roles.includes("productsManager") && "productsManager"}
               />
             ))}
           </>

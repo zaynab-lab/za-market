@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema(
     img: { type: Boolean, default: false },
     exist: { type: Boolean, default: true },
     appear: { type: Boolean, default: true },
-    description: { type: String }
+    description: { type: String },
+    createdby: { type: String }
   },
 
   { collection: "products" }

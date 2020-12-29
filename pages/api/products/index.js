@@ -26,7 +26,8 @@ export default async (req, res) => {
               initprice: body.initprice,
               price: body.price,
               measure: body.measure,
-              description: body.description
+              description: body.description,
+              createdby: user.promoCode
             });
             await createdProduct.save().catch((err) => console.log(err));
             return res.status(200).end(JSON.stringify(createdProduct));
