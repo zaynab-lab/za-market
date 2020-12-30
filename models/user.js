@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     otptimes: { type: Number },
     ordertimes: { type: Number, default: 0 },
     workingtimes: { type: Number, default: 1 },
-    department: { type: [String] },
+    pages: { type: [String], default: [] },
     jwt: { type: String },
     amount: { type: Number, default: 5000 },
     roles: { type: [String], default: ["customer"] },

@@ -1,7 +1,7 @@
 import dbConnection from "../../../util/dbConnection";
 import User from "../../../models/user";
 import jwt from "jsonwebtoken";
-import Department from "../../../models/department";
+import Role from "../../../models/role";
 
 dbConnection();
 
@@ -17,11 +17,11 @@ export default async (req, res) => {
           if (err) return res.end("invalid");
           const user = await User.findById(decoded.id).exec();
           if (user.roles.includes("GM")) {
-            const department = new Department({
+            const role = new Role({
               name: body.name
             });
-            await department.save().catch((err) => console.log(err));
-            return res.status(200).end(JSON.stringify(department));
+            await role.save().catch((err) => console.log(err));
+            return res.status(200).end(JSON.stringify(role));
           }
         });
       } catch (err) {
@@ -30,8 +30,8 @@ export default async (req, res) => {
       break;
     case "GET":
       try {
-        const department = await Department.find({});
-        return res.status(200).end(JSON.stringify(department));
+        const role = await Role.find({});
+        return res.status(200).end(JSON.stringify(role));
       } catch (err) {
         return res.status(200).end("invalid");
       }
