@@ -13,10 +13,11 @@ import {
 } from "react-icons/fa";
 import OrdersContentLoader from "../OrdersContentLoader";
 
-export default function OrdersPage() {
+export default function OrdersPage({ page }) {
   const [roles, setRoles] = useState("");
   const [orderList, setOrderList] = useState([]);
   const [current, setCurrent] = useState("record");
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
@@ -28,7 +29,7 @@ export default function OrdersPage() {
   }, [setRoles, setOrderList]);
   useEffect(() => {
     if (current === "record") {
-      axios.get("/api/orders").then((res) => {
+      axios.get("/api/orders/record").then((res) => {
         const { data } = res;
         data && setOrderList(data);
       });
@@ -40,6 +41,10 @@ export default function OrdersPage() {
       });
     }
   }, [setCurrent, current]);
+  useEffect(() => {
+    axios.get("/api/permissions/user").then((res) => setPermissions(res.data));
+  }, [setPermissions]);
+
   const handleRemove = (id) => {
     setOrderList(orderList.filter((obj) => obj._id !== id));
   };
@@ -47,23 +52,25 @@ export default function OrdersPage() {
   return (
     <>
       <OrderTopBar setCurrent={setCurrent} current={current} />
-      {roles.includes("ordersManager") && (
-        <div>
-          {orderList.length === 0 ? (
-            <OrdersContentLoader />
-          ) : (
-            orderList.map((obj, index) => (
-              <OrderItem
-                key={index}
-                order={obj}
-                role={roles.includes("GM") && "GM"}
-                current={current}
-                handleRemove={handleRemove.bind(this)}
-              />
-            ))
-          )}
-        </div>
-      )}
+      {roles.length > 1 &&
+        page === "orders" &&
+        permissions.includes("view orders") && (
+          <div>
+            {orderList.length === 0 ? (
+              <OrdersContentLoader />
+            ) : (
+              orderList.map((obj, index) => (
+                <OrderItem
+                  key={index}
+                  order={obj}
+                  permissions={permissions}
+                  current={current}
+                  handleRemove={handleRemove.bind(this)}
+                />
+              ))
+            )}
+          </div>
+        )}
     </>
   );
 }

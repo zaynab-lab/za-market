@@ -2,7 +2,12 @@ import axios from "axios";
 import { FaBan, FaCheckCircle, FaEdit } from "react-icons/fa";
 import { styles } from "../../../public/js/styles";
 
-export default function OrderControll({ role, id, current, handleRemove }) {
+export default function OrderControll({
+  permissions,
+  id,
+  current,
+  handleRemove
+}) {
   return (
     <>
       <div className="controlBar">
@@ -29,7 +34,7 @@ export default function OrderControll({ role, id, current, handleRemove }) {
               <span>إتمام المرحلة</span>
             </div>
 
-            {role === "GM" && (
+            {permissions.includes("edit orders") && (
               <>
                 <div className="edit" onClick={() => alert("i am edit buttom")}>
                   <span className="icon">

@@ -26,7 +26,8 @@ export default async function Auth(req, res) {
           number: user.number,
           mail: user.mail,
           birth: user.birth,
-          roles: user.roles
+          roles: user.roles,
+          pages: user.pages
         })
       );
     });

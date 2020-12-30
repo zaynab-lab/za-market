@@ -5,7 +5,12 @@ import { FaCalendarAlt, FaMapMarkedAlt } from "react-icons/fa";
 import OrderControll from "./OrderControll";
 import dateChanger from "../../../util/dateChanger";
 
-export default function OrderItem({ order, role, current, handleRemove }) {
+export default function OrderItem({
+  order,
+  permissions,
+  current,
+  handleRemove
+}) {
   const [hidden, setHidden] = useState(true);
 
   return (
@@ -63,7 +68,7 @@ export default function OrderItem({ order, role, current, handleRemove }) {
             <OrderEnd proceedProducts={order.products} />
             <div className="footer">
               <OrderControll
-                role={role}
+                permissions={permissions}
                 id={order._id}
                 current={current}
                 handleRemove={handleRemove.bind(this)}

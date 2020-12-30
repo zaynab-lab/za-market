@@ -17,9 +17,8 @@ export default async (req, res) => {
             if (err) return res.end("invalid");
             const user = await User.findById(decoded.id).exec();
             if (user.roles.length > 1) {
-              const role = user.roles[1];
               const permissionsList = await Permission.find({
-                roles: { $in: [role] }
+                roles: { $in: [...user.roles] }
               });
               const permissions = permissionsList.map((obj) => obj.permission);
               return res.status(200).end(JSON.stringify(permissions));

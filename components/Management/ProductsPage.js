@@ -5,12 +5,13 @@ import EditProduct from "./components/EditProduct";
 import ProductCard from "./components/ProductCard";
 import CategoryList from "./components/CategoryList";
 
-export default function ProductsPage() {
-  const [roles, setRoles] = useState("");
+export default function ProductsPage({ page }) {
+  const [roles, setRoles] = useState([]);
   const [selected, setSelected] = useState("Vegetables");
   const [productList, setProductsList] = useState([]);
   const [currentProduct, setCurrentProduct] = useState({});
   const [modal, setModal] = useState(false);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
@@ -24,6 +25,9 @@ export default function ProductsPage() {
       setProductsList(data);
     });
   }, [setRoles]);
+  useEffect(() => {
+    axios.get("/api/permissions/user").then((res) => setPermissions(res.data));
+  }, [setPermissions]);
 
   const select = (selected) => {
     axios.get(`/api/products/${selected}`).then((res) => {
@@ -58,7 +62,6 @@ export default function ProductsPage() {
             const { data } = res;
             data === "done" && callback(!state);
           });
-
         break;
       case "edit":
         setCurrentProduct(state);
@@ -88,7 +91,7 @@ export default function ProductsPage() {
   };
   return (
     <>
-      {roles.includes("productsManager") && (
+      {page === "products" && permissions.includes("view products") && (
         <div className="container">
           <CategoryList selected={selected} select={select.bind(this)} />
           <>
@@ -97,7 +100,7 @@ export default function ProductsPage() {
                 setActionById={setActionById.bind(this)}
                 key={index}
                 product={obj}
-                role={roles.includes("productsManager") && "productsManager"}
+                permissions={permissions}
               />
             ))}
           </>
@@ -115,12 +118,13 @@ export default function ProductsPage() {
               }
             />
           )}
-
-          <Modal
-            add={true}
-            refresh={setActionById}
-            children={<EditProduct add={true} />}
-          />
+          {permissions.includes("add product") && (
+            <Modal
+              add={true}
+              refresh={setActionById}
+              children={<EditProduct add={true} />}
+            />
+          )}
         </div>
       )}
 

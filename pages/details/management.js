@@ -11,6 +11,7 @@ import OrdersPage from "../../components/Management/OrdersPage";
 export default function Conditions() {
   const [loadpage, setLoadpage] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [pages, setPages] = useState([]);
   const [current, setCurrent] = useState("");
 
   useEffect(() => {
@@ -19,11 +20,12 @@ export default function Conditions() {
       .then((res) => {
         const { data } = res;
         if (data !== "noToken" && data !== "invalid") {
-          setRoles(data.roles);
+          data && setRoles(data.roles);
+          data.pages && setPages(data.pages);
         }
       })
       .then(() => setLoadpage(true));
-  }, [setRoles]);
+  }, [setRoles, setPages]);
 
   return (
     <>
@@ -40,8 +42,7 @@ export default function Conditions() {
                 العامة
               </div>
             )}
-
-            {roles.includes("productsManager") && (
+            {pages.includes("products") && (
               <div
                 className={`topBar-item ${current === "products" && "current"}`}
                 onClick={() => setCurrent("products")}
@@ -50,18 +51,16 @@ export default function Conditions() {
               </div>
             )}
 
-            {roles.includes("customersManager") && (
+            {pages.includes("users") && (
               <div
-                className={`topBar-item ${
-                  current === "customers" && "current"
-                }`}
-                onClick={() => setCurrent("customers")}
+                className={`topBar-item ${current === "users" && "current"}`}
+                onClick={() => setCurrent("users")}
               >
                 الزبائن
               </div>
             )}
 
-            {roles.includes("ordersManager") && (
+            {pages.includes("orders") && (
               <div
                 className={`topBar-item ${current === "orders" && "current"}`}
                 onClick={() => setCurrent("orders")}
@@ -72,17 +71,14 @@ export default function Conditions() {
           </div>
 
           {roles.includes("GM") && current === "GM" && <GeneralMPage />}
-
-          {roles.includes("productsManager") && current === "products" && (
-            <ProductsPage />
+          {pages.includes("products") && current === "products" && (
+            <ProductsPage page={"products"} />
           )}
-
-          {roles.includes("customersManager") && current === "customers" && (
-            <CustomersPage />
+          {pages.includes("users") && current === "users" && (
+            <CustomersPage page={"users"} />
           )}
-
-          {roles.includes("ordersManager") && current === "orders" && (
-            <OrdersPage />
+          {pages.includes("orders") && current === "orders" && (
+            <OrdersPage page={"orders"} />
           )}
         </div>
       )}

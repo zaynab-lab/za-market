@@ -4,7 +4,7 @@ import { FiAlertOctagon } from "react-icons/fi";
 import { useState } from "react";
 import Dots from "../../Loaders/Dots";
 
-export default function ProductCard({ role, product, setActionById }) {
+export default function ProductCard({ permissions, product, setActionById }) {
   const [newproduct, setproduct] = useState(product);
   const [appearDots, setAppearDots] = useState(false);
   const [existDots, setExistDots] = useState(false);
@@ -35,54 +35,56 @@ export default function ProductCard({ role, product, setActionById }) {
               <span>{newproduct.subCategory}</span>
             </div>
           </div>
-
-          {role === "productsManager" && (
-            <div className="productCard-options">
-              <li
-                onClick={() => {
-                  setAppearDots(true);
-                  setActionById(
-                    newproduct._id,
-                    "appear",
-                    newproduct.appear,
-                    (appear) => {
-                      setproduct({ ...newproduct, appear });
-                      setAppearDots(false);
-                    }
-                  );
-                }}
-              >
-                {appearDots ? (
-                  <div className="clkdots">
-                    <Dots />
-                  </div>
-                ) : (
-                  <>{newproduct.appear ? <>&#128064;</> : <FaBan />}</>
-                )}
-              </li>
-
-              <li
-                onClick={() => {
-                  setExistDots(true);
-                  setActionById(
-                    newproduct._id,
-                    "exist",
-                    newproduct.exist,
-                    (exist) => {
-                      setproduct({ ...newproduct, exist });
-                      setExistDots(false);
-                    }
-                  );
-                }}
-              >
-                {existDots ? (
-                  <div className="clkdots">
-                    <Dots />
-                  </div>
-                ) : (
-                  <>{newproduct.exist ? <FaStore /> : <FiAlertOctagon />}</>
-                )}
-              </li>
+          <div className="productCard-options">
+            {permissions.includes("control products") && (
+              <>
+                <li
+                  onClick={() => {
+                    setAppearDots(true);
+                    setActionById(
+                      newproduct._id,
+                      "appear",
+                      newproduct.appear,
+                      (appear) => {
+                        setproduct({ ...newproduct, appear });
+                        setAppearDots(false);
+                      }
+                    );
+                  }}
+                >
+                  {appearDots ? (
+                    <div className="clkdots">
+                      <Dots />
+                    </div>
+                  ) : (
+                    <>{newproduct.appear ? <>&#128064;</> : <FaBan />}</>
+                  )}
+                </li>
+                <li
+                  onClick={() => {
+                    setExistDots(true);
+                    setActionById(
+                      newproduct._id,
+                      "exist",
+                      newproduct.exist,
+                      (exist) => {
+                        setproduct({ ...newproduct, exist });
+                        setExistDots(false);
+                      }
+                    );
+                  }}
+                >
+                  {existDots ? (
+                    <div className="clkdots">
+                      <Dots />
+                    </div>
+                  ) : (
+                    <>{newproduct.exist ? <FaStore /> : <FiAlertOctagon />}</>
+                  )}
+                </li>
+              </>
+            )}
+            {permissions.includes("edit products") && (
               <li>
                 <FaEdit
                   onClick={() => {
@@ -90,8 +92,8 @@ export default function ProductCard({ role, product, setActionById }) {
                   }}
                 />
               </li>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="productCard-footer">
           {newproduct.initprice && (
