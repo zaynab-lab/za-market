@@ -6,8 +6,8 @@ import ContentLoad from "./OrdersContentLoader";
 import { useEffect, useState } from "react";
 import dateChanger from "../util/dateChanger";
 
-const OrderItem = ({ currentList }) => {
-  const [hidden, setHidden] = useState(true);
+const OrderItem = ({ currentList, index }) => {
+  const [hidden, setHidden] = useState(index === 0 ? false : true);
 
   return (
     <>
@@ -132,8 +132,8 @@ export default function Orders({ current, orderList }) {
         <ContentLoad />
       ) : (
         <>
-          {currentList.map((obj) => (
-            <OrderItem key={obj.orderCode} currentList={obj} />
+          {currentList.map((obj, index) => (
+            <OrderItem key={obj.orderCode} index={index} currentList={obj} />
           ))}
         </>
       )}

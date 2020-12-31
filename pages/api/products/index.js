@@ -2,12 +2,12 @@ import dbConnection from "../../../util/dbConnection";
 import Product from "../../../models/product";
 import User from "../../../models/user";
 import jwt from "jsonwebtoken";
+import Permission from "../../../models/permission";
 
 dbConnection();
 
 export default async (req, res) => {
   const { method } = req;
-
   switch (method) {
     case "POST":
       try {
@@ -17,20 +17,26 @@ export default async (req, res) => {
         jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
           if (err) return res.end("invalid");
           const user = await User.findById(decoded.id).exec();
-          if (user.roles.includes("productsManager")) {
-            const createdProduct = new Product({
-              name: body.name,
-              brand: body.brand,
-              category: body.category,
-              subCategory: body.subCategory,
-              initprice: body.initprice,
-              price: body.price,
-              measure: body.measure,
-              description: body.description,
-              createdby: user.promoCode
+          if (user.roles.length > 1) {
+            const permissionsList = await Permission.find({
+              roles: { $in: [...user.roles] }
             });
-            await createdProduct.save().catch((err) => console.log(err));
-            return res.status(200).end(JSON.stringify(createdProduct));
+            const permissions = permissionsList.map((obj) => obj.permission);
+            if (permissions.includes("add product")) {
+              const createdProduct = new Product({
+                name: body.name,
+                brand: body.brand,
+                category: body.category,
+                subCategory: body.subCategory,
+                initprice: body.initprice,
+                price: body.price,
+                measure: body.measure,
+                description: body.description,
+                createdby: user.promoCode
+              });
+              await createdProduct.save().catch((err) => console.log(err));
+              return res.status(200).end(JSON.stringify(createdProduct));
+            }
           }
           return res.status(400).end("invalid");
         });

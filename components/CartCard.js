@@ -115,6 +115,7 @@ export default function CartCard({ product }) {
           color: lightgray;
           padding: 0.2rem 0.8rem;
           width: 100%;
+          font-size: 1rem;
           border-top: 1px solid ${styles.primaryColorLight};
           border-radius: 0rem 0rem 0.5rem 0.5rem;
         }

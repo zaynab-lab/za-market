@@ -2,25 +2,38 @@ import { useState, useEffect } from "react";
 import { styles } from "../../public/js/styles";
 import axios from "axios";
 import Input from "../Input";
-import { FaTrash } from "react-icons/fa";
+import {
+  FaArrowDown,
+  FaArrowLeft,
+  FaArrowRight,
+  FaArrowUp,
+  FaTrash
+} from "react-icons/fa";
 import CreateSelect from "./components/CreateSelect";
-import { codeGenerator } from "../../util/codeGenerator";
 
 export default function GeneralMPage() {
   const [roles, setRoles] = useState("");
   const [state, setState] = useState({
     name: "",
     title: "",
-    category: "",
     subCategory: ""
   });
-  const [section, setSection] = useState({});
   const [categoryList, setCategoryList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [section, setSection] = useState({});
   const [subCategoryList, setSubCategoryList] = useState([]);
+  const [rolesList, setRolesList] = useState([]);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [permissionsList, setPermissionsList] = useState([]);
+  const [selectedPermission, setSelectedPermission] = useState("");
+  const [rolePermissions, setRolePermissions] = useState([]);
+  const [usersList, setUsersList] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
+
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
-  const [departmentList, setDepartmentList] = useState([]);
 
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
@@ -31,26 +44,58 @@ export default function GeneralMPage() {
     });
     axios.get("/api/categories").then((res) => {
       const { data } = res;
-      data && setCategoryList(data);
+      const cat = data.map((obj) => obj.name);
+      data && setCategoryList(cat);
     });
-    axios.get("/api/departments").then((res) => {
+    axios.get("/api/roles").then((res) => {
       const { data } = res;
-      const list = data.map((obj) => obj.name);
-      setDepartmentList(list);
-      console.log(codeGenerator());
+      setRolesList(data);
     });
-  }, [setRoles, setCategoryList]);
+    axios.get("/api/permissions").then((res) => {
+      const { data } = res;
+      setPermissionsList(data);
+    });
+    axios.get("/api/users/byRole").then((res) => {
+      const { data } = res;
+      setUsersList(data);
+    });
+  }, [setRoles, setCategoryList, setPermissionsList, setUsersList]);
+
+  useEffect(() => {
+    selectedRole.length > 0 &&
+      axios.get(`/api/permissions/${selectedRole}`).then((res) => {
+        const { data } = res;
+        setRolePermissions(data);
+      });
+  }, [selectedRole]);
+
+  useEffect(() => {
+    if (selectedCategory !== "") {
+      axios
+        .get(`/api/categories/${selectedCategory}`)
+        .then((res) => setSubCategoryList(res.data));
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    const user = usersList.filter((user) => user.name === selectedUser)[0];
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, [selectedUser, setCurrentUser, usersList]);
 
   return (
     <>
       {roles.includes("GM") && (
         <div className="container">
           {/* //////////////addCategory///////// */}
-          <div
-            className="section"
-            onClick={() => setSection({ ...section, n1: !section.n1 })}
-          >
-            <div className="title">اضافة قسم</div>
+          <div className="section">
+            <div
+              className="title"
+              onClick={() => setSection({ ...section, n1: !section.n1 })}
+            >
+              اضافة قسم
+            </div>
             {section.n1 && (
               <>
                 <Input
@@ -109,47 +154,12 @@ export default function GeneralMPage() {
             </div>
             {section.n2 && (
               <>
-                <div className="addCategory-comb">
-                  <select
-                    className="select"
-                    onChange={(e) => {
-                      setState({ ...state, category: e.target.value });
-                      e.target.value === ""
-                        ? setSubCategoryList([])
-                        : axios
-                            .get(`/api/categories/${e.target.value}`)
-                            .then((res) => setSubCategoryList(res.data));
-                    }}
-                  >
-                    <option value="">اختر قسم</option>
-                    {categoryList.map((obj, index) => (
-                      <option key={index} value={obj.name}>
-                        {obj.title}
-                      </option>
-                    ))}
-                  </select>
-                  <FaTrash
-                    onClick={() => {
-                      state.category !== "" &&
-                        axios
-                          .delete(`/api/categories/${state.category}`)
-                          .then((res) =>
-                            res.data === "done"
-                              ? axios
-                                  .get("/api/categories")
-                                  .then((res) => {
-                                    const { data } = res;
-                                    data && setCategoryList(data);
-                                  })
-                                  .then(() => {
-                                    setState({ ...state, subCategory: "" });
-                                    setSubCategoryList([]);
-                                  })
-                              : alert("errrrr")
-                          );
-                    }}
-                  />
-                </div>
+                <CreateSelect
+                  initOptions={categoryList}
+                  name={"category"}
+                  placeholder={"اختر قسم"}
+                  setSelect={setSelectedCategory}
+                />
                 <div className="addCategory-comb">
                   <select
                     className="select"
@@ -182,7 +192,6 @@ export default function GeneralMPage() {
                     }
                   />
                 </div>
-
                 <div className="addCategory-comb">
                   <Input
                     name={"subCategory"}
@@ -227,30 +236,157 @@ export default function GeneralMPage() {
               className="title"
               onClick={() => setSection({ ...section, n3: !section.n3 })}
             >
-              اضافة مباني و مهام
+              اضافة دور وأذونات
             </div>
             {section.n3 && (
               <>
-                <CreateSelect
-                  initOptions={departmentList}
-                  url={"/api/departments"}
-                  name={"name"}
-                  placeholder={"اختر مبنى"}
-                />
                 <div className="addCategory-comb">
-                  <select className="select">
-                    <option value="">المبنى</option>
-                    {departmentList.map((obj, i) => (
-                      <option key={i}>{obj}</option>
+                  <CreateSelect
+                    initOptions={rolesList}
+                    url={"/api/roles"}
+                    name={"role"}
+                    placeholder={"اختر دور"}
+                    setSelect={setSelectedRole}
+                  />
+                  <CreateSelect
+                    initOptions={permissionsList}
+                    url={"/api/permissions"}
+                    name={"permission"}
+                    placeholder={"أضف إذن"}
+                    setSelect={setSelectedPermission}
+                  />
+                </div>
+                <div>
+                  أذونات الدور:{" "}
+                  <el>
+                    {rolePermissions.map((perm) => (
+                      <li>{perm}</li>
                     ))}
-                  </select>
-
-                  <button className="addCategorybtn" onClick={() => {}}>
-                    اضافة
-                  </button>
+                  </el>
+                </div>
+                <div className="merge">
+                  {selectedRole}
+                  <span
+                    className="mergebtn"
+                    onClick={() => {
+                      if (selectedPermission !== "" && selectedRole !== "") {
+                        if (rolePermissions.includes(selectedPermission)) {
+                          alert("الدور مأذون له بالفعل");
+                        } else {
+                          axios
+                            .put(
+                              `/api/permissions/${selectedRole}`,
+                              { permission: selectedPermission },
+                              { "content-type": "application/json" }
+                            )
+                            .then((res) => {
+                              const { data } = res;
+                              data === "done" &&
+                                setRolePermissions([
+                                  ...rolePermissions,
+                                  selectedPermission
+                                ]);
+                            });
+                        }
+                      } else {
+                        alert("أختر المطلوب");
+                      }
+                    }}
+                  >
+                    <FaArrowLeft />
+                  </span>
+                  {selectedPermission}
                 </div>
               </>
             )}
+          </div>
+          {/* //////////////addToDepartment///////// */}
+
+          <div className="section">
+            <div
+              className="title"
+              onClick={() => setSection({ ...section, n4: !section.n4 })}
+            >
+              تخصيص دور للعضو
+            </div>
+
+            {section.n4 && (
+              <>
+                <div className="addCategory-comb">
+                  <CreateSelect
+                    initOptions={usersList.map((user) => user.name)}
+                    name={"role"}
+                    placeholder={"اختر عضو"}
+                    setSelect={setSelectedUser}
+                  />
+
+                  <CreateSelect
+                    initOptions={rolesList}
+                    name={"role"}
+                    placeholder={"تخصيص دور"}
+                    setSelect={setSelectedRole}
+                  />
+                </div>
+                <div className="column">
+                  <div>
+                    أدوار العضو:{" "}
+                    <el>
+                      {currentUser.roles &&
+                        currentUser.roles
+                          .filter((role) => role !== "customer")
+                          .map((role) => <li>{role}</li>)}
+                    </el>
+                  </div>
+                  <div>
+                    صفحات الوصول:
+                    <el>
+                      {currentUser.pages &&
+                        currentUser.pages.map((role) => <li>{role}</li>)}
+                    </el>
+                  </div>
+                </div>
+                <div className="merge">
+                  {selectedUser}
+                  <span
+                    className="mergebtn"
+                    onClick={() => {
+                      if (selectedUser !== "" && selectedRole !== "") {
+                        if (currentUser.roles.includes(selectedRole)) {
+                          alert("الدور مخصص للعضو");
+                        } else {
+                          alert("لمزيد من الأمان أضف عن طريق مستودع البيانات");
+                        }
+                      } else {
+                        alert("أختر المطلوب");
+                      }
+                    }}
+                  >
+                    <FaArrowRight />
+                  </span>
+                  {selectedRole}
+                </div>
+              </>
+            )}
+          </div>
+          <div className="mergeSec">
+            <span
+              className="mergebtn"
+              onClick={() =>
+                axios
+                  .put(
+                    "/api/roles",
+                    { permission: "yes" },
+                    { "content-type": "application/json" }
+                  )
+                  .then((res) => {
+                    const { data } = res;
+                    data === "done" && alert("done");
+                  })
+              }
+            >
+              <FaArrowDown />
+              <FaArrowUp />
+            </span>
           </div>
         </div>
       )}
@@ -304,6 +440,40 @@ export default function GeneralMPage() {
 
         .title {
           color: ${styles.secondaryColor};
+        }
+        .merge {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0.6rem 0;
+          margin: 0.5rem 0;
+          border: 1px solid ${styles.primaryColor};
+          border-radius: 0.5rem;
+        }
+        el {
+          font-size: 0.9rem;
+          color: grey;
+        }
+        .mergeSec {
+          margin: 1rem;
+          display: flex;
+          justify-content: center;
+        }
+        .mergebtn {
+          font-size: 1rem;
+          line-height: 0.8rem;
+          color: white;
+          padding: 0.3rem 1.1rem;
+          border-radius: 0.2rem;
+          background: ${styles.primaryColorLight};
+          margin: auto 0.8rem;
+        }
+        .column {
+          display: flex;
+        }
+        .column div {
+          flex: 1 1 100%;
+          padding: 0 1rem;
         }
       `}</style>
     </>

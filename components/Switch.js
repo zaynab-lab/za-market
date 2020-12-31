@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa";
 
 export const toggleState = atom({
   key: "toggle",
-  default: true
+  default: false
 });
 
 export default () => {

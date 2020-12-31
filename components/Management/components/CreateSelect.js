@@ -2,7 +2,13 @@ import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import { styles } from "../../../public/js/styles";
 
-export default function CreateSelect({ placeholder, initOptions, url, name }) {
+export default function CreateSelect({
+  placeholder,
+  initOptions,
+  url,
+  name,
+  setSelect
+}) {
   const [show, setShow] = useState(false);
   const [text, setText] = useState("");
   const [options, setOptions] = useState(initOptions);
@@ -55,15 +61,17 @@ export default function CreateSelect({ placeholder, initOptions, url, name }) {
                 break;
               case 13:
                 search.length > 0 && setText(search[activeOne]);
+                search.length > 0 && setSelect(search[activeOne]);
                 setShow(false);
                 setActiveOne(0);
                 if (search.length === 0 && text.length > 3) {
                   setOptions([...options, text]);
-                  axios.post(
-                    url,
-                    { [name]: text },
-                    { "content-type": "application/json" }
-                  );
+                  url &&
+                    axios.post(
+                      url,
+                      { [name]: text },
+                      { "content-type": "application/json" }
+                    );
                 }
                 break;
               default:
@@ -88,6 +96,7 @@ export default function CreateSelect({ placeholder, initOptions, url, name }) {
                   className={`option ${index === activeOne && "active"}`}
                   onClick={() => {
                     setText(obj);
+                    setSelect(obj);
                     setActiveOne(index);
                   }}
                 >
@@ -101,17 +110,20 @@ export default function CreateSelect({ placeholder, initOptions, url, name }) {
                       className={`option ${search.length === 0 && "active"}`}
                       onClick={() => {
                         setOptions([...options, text]);
-                        axios.post(
-                          url,
-                          { [name]: text },
-                          { "content-type": "application/json" }
-                        );
+                        url &&
+                          axios.post(
+                            url,
+                            { [name]: text },
+                            { "content-type": "application/json" }
+                          );
                       }}
                     >
                       اضف {`"${text}"`}
                     </div>
                   )
-                : search.length === 0 && <noOption>No Option</noOption>}
+                : search.length === 0 && (
+                    <div className="noOption">No Option</div>
+                  )}
             </div>
           )}
         </div>

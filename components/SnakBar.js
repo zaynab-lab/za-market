@@ -36,7 +36,7 @@ export default function SnakBar({ message, show }) {
           width: -moz-fit-content;
           width: fit-content;
           padding: 0.2rem 1rem;
-          font-size: 1rem;
+          font-size: 1.1rem;
           border-radius: 1.8rem;
           -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
           animation: fadein 0.5s, fadeout 0.5s 2.5s;
