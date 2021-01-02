@@ -7,6 +7,7 @@ import GeneralMPage from "../../components/Management/GeneralMPage";
 import ProductsPage from "../../components/Management/ProductsPage";
 import CustomersPage from "../../components/Management/CustomersPage";
 import OrdersPage from "../../components/Management/OrdersPage";
+import CreditPage from "../../components/Management/CreditPage";
 
 export default function Conditions() {
   const [loadpage, setLoadpage] = useState(false);
@@ -68,6 +69,13 @@ export default function Conditions() {
                 الطلبيات
               </div>
             )}
+
+            <div
+              className={`topBar-item ${current === "credit" && "current"}`}
+              onClick={() => setCurrent("credit")}
+            >
+              حسابك
+            </div>
           </div>
 
           {roles.includes("GM") && current === "GM" && <GeneralMPage />}
@@ -80,6 +88,7 @@ export default function Conditions() {
           {pages.includes("orders") && current === "orders" && (
             <OrdersPage page={"orders"} />
           )}
+          {current === "credit" && <CreditPage page={"credit"} />}
         </div>
       )}
       <style jsx>{`

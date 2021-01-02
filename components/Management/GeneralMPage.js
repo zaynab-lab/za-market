@@ -30,6 +30,7 @@ export default function GeneralMPage() {
   const [usersList, setUsersList] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [currentUser, setCurrentUser] = useState({});
+  const [productsCount, setProductsCount] = useState("");
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -81,6 +82,11 @@ export default function GeneralMPage() {
     const user = usersList.filter((user) => user.name === selectedUser)[0];
     if (user) {
       setCurrentUser(user);
+      axios
+        .get(`/api/products/byCreator?code=${user.promoCode}`)
+        .then((res) => {
+          setProductsCount(res.data);
+        });
     }
   }, [selectedUser, setCurrentUser, usersList]);
 
@@ -179,15 +185,17 @@ export default function GeneralMPage() {
                       state.subCategory !== "" &&
                       axios
                         .put(
-                          `/api/categories/${state.category}`,
-                          { subCategory: JSON.stringify(state.subCategory) },
-                          { "content-type": "application/json" }
+                          `/api/categories/${selectedCategory}?subCategory=${state.subCategory}`
                         )
                         .then((res) => {
                           res.data === "done" &&
-                            axios
-                              .get(`/api/categories/${state.category}`)
-                              .then((res) => setSubCategoryList(res.data));
+                            setSubCategoryList(
+                              subCategoryList.filter(
+                                (sub) => sub !== state.subCategory
+                              )
+                            );
+                          res.data === "done" &&
+                            setState({ ...state, subCategory: "" });
                         })
                     }
                   />
@@ -203,24 +211,30 @@ export default function GeneralMPage() {
                   <button
                     className="addCategorybtn"
                     onClick={() => {
-                      state.category !== "" && state.subCategory !== ""
+                      selectedCategory !== "" &&
+                      !subCategoryList.includes(state.subCategory)
                         ? axios
                             .post(
                               "/api/subCategories",
                               {
-                                category: state.category,
+                                category: selectedCategory,
                                 subCategory: state.subCategory
                               },
                               { "content-type": "application/json" }
                             )
                             .then((res) => {
                               res.data === "done" &&
-                                axios
-                                  .get(`/api/categories/${state.category}`)
-                                  .then((res) => setSubCategoryList(res.data));
+                                setSubCategoryList([
+                                  ...subCategoryList,
+                                  state.subCategory
+                                ]);
+                              res.data === "done" &&
+                                setState({ ...state, subCategory: "" });
                             })
                             .then(() => (state.subCategory = ""))
-                        : alert("املء الفراغات اللازمة");
+                        : alert(
+                            "املء الفراغات اللازمة، وتأكد من عدم وجود المجموعة"
+                          );
                     }}
                   >
                     اضافة مجموعة
@@ -329,14 +343,25 @@ export default function GeneralMPage() {
                 </div>
                 <div className="column">
                   <div>
+                    الإضافات: <el>{productsCount}</el>
+                  </div>
+                  <div>
+                    المستحقات: <el>{productsCount * 600}</el>
+                  </div>
+                </div>
+                <div className="column">
+                  <div>
                     أدوار العضو:{" "}
                     <el>
                       {currentUser.roles &&
                         currentUser.roles
+
                           .filter((role) => role !== "customer")
+
                           .map((role) => <li>{role}</li>)}
                     </el>
                   </div>
+
                   <div>
                     صفحات الوصول:
                     <el>
@@ -345,6 +370,7 @@ export default function GeneralMPage() {
                     </el>
                   </div>
                 </div>
+
                 <div className="merge">
                   {selectedUser}
                   <span

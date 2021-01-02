@@ -24,6 +24,13 @@ export default function ProductCard({ permissions, product, setActionById }) {
           )}
           <div className="productCard-content">
             <div className="productCard-name">{newproduct.name}</div>
+
+            {newproduct.description && (
+              <div className="productCard-brand">
+                تفاصيل: {newproduct.description}
+              </div>
+            )}
+
             {newproduct.brand && (
               <div className="productCard-brand">
                 الماركة: {newproduct.brand}
@@ -165,10 +172,8 @@ export default function ProductCard({ permissions, product, setActionById }) {
         }
 
         .productCard-name {
-          font-size: 1.5rem;
-
-          padding-bottom: 0.5rem;
-
+          font-size: 1.3rem;
+          padding-bottom: 0.2rem;
           color: ${styles.secondaryColor};
         }
 
