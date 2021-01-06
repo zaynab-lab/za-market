@@ -13,23 +13,26 @@ export default async (req, res) => {
   const {
     query: { category, subCategory }
   } = req;
+
   const token = req.cookies.jwt;
   if (!token) return res.end("noToken");
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
     if (err) return res.end("invalid");
     const user = await User.findById(decoded.id).exec();
+    if (user && method === "GET") {
+      try {
+        const selectedcategory = await Category.findOne({
+          name: category
+        }).exec();
+
+        return res.end(JSON.stringify(selectedcategory.subCategory));
+      } catch (err) {
+        return res.end(JSON.stringify([]));
+      }
+    }
+
     if (user.roles.includes("GM")) {
       switch (method) {
-        case "GET":
-          try {
-            const selectedcategory = await Category.findOne({
-              name: category
-            }).exec();
-            return res.end(JSON.stringify(selectedcategory.subCategory));
-          } catch (err) {
-            return res.end(JSON.stringify([]));
-          }
-
         case "DELETE":
           try {
             Category.deleteOne({ name: category }).exec();
