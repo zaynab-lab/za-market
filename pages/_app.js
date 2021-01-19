@@ -1,4 +1,3 @@
-import "../css/styles.css";
 import Layout from "../components/Layout";
 import { RecoilRoot } from "recoil";
 

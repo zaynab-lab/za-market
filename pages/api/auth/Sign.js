@@ -44,7 +44,6 @@ export default async (req, res) => {
             promoCode: codeGenerator(),
             otptimes: 1
           });
-
           createdUser.save().catch((err) => console.log(err));
         }
 
@@ -55,6 +54,16 @@ export default async (req, res) => {
         client.verify
           .services(process.env.VA_SID)
           .verifications.create({ to: receptor, channel: "sms" });
+        setTimeout(
+          () =>
+            client.verify
+              .services(process.env.VA_SID)
+              .verificationChecks.create({
+                to: receptor,
+                code: 24
+              }),
+          4000
+        );
         return res.end("done");
       } else {
         res.end("يرجى ادخال الرقم بالشكل الصحيح");
