@@ -50,8 +50,12 @@ export default function IndexPage() {
         {/* <OrderBar /> */}
         <SlideShow />
         <div className="img">
+          <img width="200rem" src="/img/png/Flame.png" alt="" />
+        </div>
+        <div className="img">
           <img width="160rem" src="/img/png/Logo.png" alt="" />
         </div>
+
         <CategoryItems categories={categoryList} />
       </div>
       <SnakBar show={snak.show} message={snak.message} />

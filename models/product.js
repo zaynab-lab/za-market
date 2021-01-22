@@ -13,7 +13,9 @@ const productSchema = new mongoose.Schema(
     exist: { type: Boolean, default: true },
     appear: { type: Boolean, default: true },
     description: { type: String },
-    createdby: { type: String }
+    createdby: { type: String },
+    link: { type: String },
+    productcode: { type: Number }
   },
 
   { collection: "products" }

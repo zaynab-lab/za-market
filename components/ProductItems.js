@@ -14,7 +14,11 @@ const ProductCard = ({ product }) => (
               alt={product.name}
             />
           ) : (
-            <img className="card-img" src="/img/png/noImg.png" alt="" />
+            <img
+              className="card-img"
+              src={product.link ? product.link : "/img/png/noImg.png"}
+              alt=""
+            />
           )
         ) : (
           <ImageLoader />

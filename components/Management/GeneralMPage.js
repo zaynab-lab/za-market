@@ -414,6 +414,26 @@ export default function GeneralMPage() {
               <FaArrowUp />
             </span>
           </div>
+          <div className="mergeSec">
+            <span
+              className="mergebtn"
+              onClick={() =>
+                axios
+                  .post(
+                    "/api/products/external",
+                    { permission: "yes" },
+                    { "content-type": "application/json" }
+                  )
+                  .then((res) => {
+                    const { data } = res;
+                    data === "done" && alert("done");
+                  })
+              }
+            >
+              Upload products
+              <FaArrowUp />
+            </span>
+          </div>
         </div>
       )}
 

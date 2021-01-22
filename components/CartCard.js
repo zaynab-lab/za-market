@@ -19,7 +19,11 @@ export default function CartCard({ product }) {
               alt={product.name}
             />
           ) : (
-            <img className="cartCard-ImgName" src="/img/png/noImg.png" alt="" />
+            <img
+              className="cartCard-img"
+              src={product.link ? product.link : "/img/png/noImg.png"}
+              alt={product.name}
+            />
           )}
           <div className="cartCard-content">
             <div className="cartCard-name">{product.name}</div>
