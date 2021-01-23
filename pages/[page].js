@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import TopBar from "../components/TopBar";
 import ProductItems from "../components/ProductItems";
 import { useRecoilValue } from "recoil";
-import LoadData from "../components/LoadData";
 import { categoriesState } from "./index";
 import axios from "axios";
 

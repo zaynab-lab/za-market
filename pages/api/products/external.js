@@ -7,7 +7,7 @@ import fs from "fs";
 dbConnection();
 
 export default async (req, res) => {
-  var obj = JSON.parse(fs.readFileSync("./public/js/Nuts.json", "utf8"));
+  var obj = JSON.parse(fs.readFileSync("./public/js/Diaryproducts.json", "utf8"));
   const { method } = req;
   if (method === "POST") {
     const { body } = req;

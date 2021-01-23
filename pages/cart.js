@@ -59,12 +59,20 @@ export default function CartPage() {
     msg && fire(msg);
     msg && router.push("/");
   }, [msg, router]);
+  const skelaton = new Array(2).fill({ appear: true });
 
   return (
     <>
       <TopBar title="عربة التسوق" />
       <div className="container">
         <div className="cartItems">
+          {cartList.length !== 0 &&
+            cartProducts.length === 0 &&
+            skelaton.map((obj) => (
+              <div key={obj._id}>
+                <CartCard product={obj} />
+              </div>
+            ))}
           {cartProducts.map((obj) => (
             <div key={obj._id}>
               <CartCard product={obj} />

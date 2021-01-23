@@ -13,7 +13,9 @@ const orderSchema = new mongoose.Schema(
         measure: { type: String },
         category: { type: String },
         quantity: { type: Number },
-        price: { type: Number }
+        price: { type: Number },
+        img: { type: Boolean },
+        link: { type: String }
       }
     ],
     address: { type: String },

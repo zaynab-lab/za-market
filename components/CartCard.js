@@ -2,6 +2,7 @@ import Controll from "./Controll";
 import { cartListState } from "../pages/cart";
 import { useRecoilValue } from "recoil";
 import { styles } from "../public/js/styles";
+import ImageLoader, { NameLoader, PriceLoader } from "./CartContentLoader";
 
 export default function CartCard({ product }) {
   const cartList = useRecoilValue(cartListState);
@@ -12,28 +13,44 @@ export default function CartCard({ product }) {
     <>
       <div className="cartCard">
         <div className="cartCard-ImgName">
-          {product.img ? (
-            <img
-              className="cartCard-img"
-              src={`https://storage.googleapis.com/za-market/Products/${product.category}/${product._id}.png`}
-              alt={product.name}
-            />
+          {product.category ? (
+            product.img ? (
+              <img
+                className="cartCard-img"
+                src={`https://storage.googleapis.com/za-market/Products/${product.category}/${product._id}.png`}
+                alt={product.name}
+              />
+            ) : (
+              <img
+                className="cartCard-img"
+                src={product.link ? product.link : "/img/png/noImg.png"}
+                alt={product.name}
+              />
+            )
           ) : (
-            <img
-              className="cartCard-img"
-              src={product.link ? product.link : "/img/png/noImg.png"}
-              alt={product.name}
-            />
+            <ImageLoader />
           )}
           <div className="cartCard-content">
-            <div className="cartCard-name">{product.name}</div>
-            <Controll id={product._id} measure={product.measure} />
+            {product.category ? (
+              <div className="cartCard-name">{product.name}</div>
+            ) : (
+              <div className="cartCard-name">
+                <NameLoader />
+              </div>
+            )}
+            {product.category && (
+              <Controll id={product._id} measure={product.measure} />
+            )}
           </div>
         </div>
 
         <div className="cartCard-footer">
-          <div className="cartCard-price">السعر: {product.price}</div>
-          <div className="cartCard-total">الإجمالي: {product.price * a}</div>
+          <div className="cartCard-price">
+            السعر: {product.category ? product.price : <PriceLoader />}
+          </div>
+          <div className="cartCard-total">
+            الإجمالي: {product.category ? product.price * a : <PriceLoader />}
+          </div>
         </div>
       </div>
 
