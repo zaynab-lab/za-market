@@ -32,6 +32,7 @@ export default async (req, res) => {
                 Product.findByIdAndUpdate(id, { exist: body.exist }, (err) => {
                   return err && res.end("invalid");
                 }).exec();
+                return res.status(200).end("done");
               } else if (!!body.appear === body.appear) {
                 Product.findByIdAndUpdate(
                   id,
@@ -40,12 +41,14 @@ export default async (req, res) => {
                     return err && res.end("invalid");
                   }
                 ).exec();
+                return res.status(200).end("done");
               }
-              return res.status(200).end("done");
-            } else if (
-              permissions.includes("edit products") &&
-              !body.exist &&
-              !body.appear
+            }
+            if (
+              body.name &&
+              body.category &&
+              body.price &&
+              permissions.includes("edit products")
             ) {
               Product.findByIdAndUpdate(
                 id,

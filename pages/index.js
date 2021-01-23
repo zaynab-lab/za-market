@@ -1,6 +1,5 @@
 import CategoryItems from "../components/CategoryItems";
 import TopBar from "../components/TopBar";
-import OrderBar from "../components/OrderBar";
 import { atom, useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import axios from "axios";
