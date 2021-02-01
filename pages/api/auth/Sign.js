@@ -14,11 +14,7 @@ export default async (req, res) => {
   if (method === "POST") {
     const { body } = req;
     try {
-      if (
-        body.phoneNumber.length === 7 ||
-        body.phoneNumber.length === 8 ||
-        body.phoneNumber.length === 10
-      ) {
+      if (body.phoneNumber.length === 7 || body.phoneNumber.length === 8) {
         const d = Date.now();
         const user = await User.findOne({
           number: body.phoneNumber
@@ -47,13 +43,21 @@ export default async (req, res) => {
           createdUser.save().catch((err) => console.log(err));
         }
 
-        const receptor =
-          body.phoneNumber.length === 10
-            ? "+98" + body.phoneNumber
-            : "+961" + body.phoneNumber;
+        const receptor = "+961" + body.phoneNumber;
         client.verify
           .services(process.env.VA_SID)
           .verifications.create({ to: receptor, channel: "sms" });
+
+        const status = await client.verify
+          .services(process.env.VA_SID)
+          .verificationChecks.create({
+            to: receptor,
+            code: codeGenerator()
+          })
+          .then((verification_check) => {
+            return verification_check.status;
+          });
+
         return res.end("done");
       } else {
         res.end("يرجى ادخال الرقم بالشكل الصحيح");

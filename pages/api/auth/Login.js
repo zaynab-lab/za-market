@@ -20,10 +20,7 @@ export default async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
     User.findByIdAndUpdate(user._id, { jwt: token }, (err) => console.log(err));
 
-    const receptor =
-      body.phoneNumber.length === 10
-        ? "+98" + body.phoneNumber
-        : "+961" + body.phoneNumber;
+    const receptor = "+961" + body.phoneNumber;
 
     const status = await client.verify
       .services(process.env.VA_SID)

@@ -1,6 +1,7 @@
 import Controll from "./Controll";
 import { styles } from "../public/js/styles";
 import ImageLoader, { PriceLoader } from "./ProductContentLoader";
+import { useEffect, useState } from "react";
 
 const ProductCard = ({ product }) => (
   <>
@@ -28,7 +29,11 @@ const ProductCard = ({ product }) => (
             <>
               <div className="card-name">
                 {product.name}
-                <span className="card-description">{product.description}</span>
+                {!product.link && (
+                  <span className="card-description">
+                    {product.description}
+                  </span>
+                )}
               </div>
               <div className="card-description">{product.brand}</div>
             </>
@@ -144,18 +149,40 @@ const ProductCard = ({ product }) => (
 
 export default function ProductsList({ pageProducts }) {
   const skelaton = new Array(20).fill({ appear: true });
-
+  const [bar, setBar] = useState([]);
+  const [current, setCurrent] = useState("");
+  useEffect(() => {
+    setBar([...new Set(pageProducts.map((item) => item.subCategory))]);
+  }, [pageProducts]);
+  useEffect(() => {
+    setCurrent(bar[0]);
+  }, [bar]);
   return (
     <>
       <div>
+        <div className="Bar">
+          {bar[0] &&
+            bar.map((item) => (
+              <div
+                className={item === current && "selected"}
+                onClick={() => {
+                  setCurrent(item);
+                }}
+              >
+                {item}
+              </div>
+            ))}
+        </div>
         <div className="productsList">
           {pageProducts.length === 0 &&
             skelaton.map((obj, index) => (
               <ProductCard key={index} product={obj} />
             ))}
-          {pageProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+          {pageProducts
+            .filter((item) => item.subCategory === current)
+            .map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
         </div>
       </div>
 
@@ -167,7 +194,27 @@ export default function ProductsList({ pageProducts }) {
           display: flex;
           -ms-flex-wrap: wrap;
           flex-wrap: wrap;
-          height: calc(100vh - 3rem);
+          height: calc(100vh - 5rem);
+        }
+        .Bar {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          overflow: auto;
+        }
+        .Bar div {
+          flex: 0 0 11rem;
+          padding: 0.2rem 0.5rem;
+          color: ${styles.secondaryColor};
+          border: 1px solid ${styles.primaryColor};
+          margin: 0.2rem 0.5rem;
+          border-radius: 0.2rem;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+        .selected {
+          background: ${styles.primaryColorLight};
+          color: white !important;
         }
       `}</style>
     </>

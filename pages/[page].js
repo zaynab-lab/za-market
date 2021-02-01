@@ -27,7 +27,10 @@ export default function Page() {
   useEffect(() => {
     axios.get(`/api/products/${page}`).then((res) => {
       const { data } = res;
-      setPageProducts(data);
+      const newdata = data
+        .filter((item) => item.exist === true)
+        .concat(data.filter((item) => item.exist === false));
+      setPageProducts(newdata);
     });
   }, [setPageProducts, page]);
 

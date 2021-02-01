@@ -109,7 +109,7 @@ export default function Controll(props) {
       .controll-count:after {
       padding-right:.2rem;
       font-size: 0.7rem;
-      content: '${props.measure}';
+      content: '${props.measure ? props.measure : " "}';
       }
     `}</style>
     </>

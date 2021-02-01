@@ -132,6 +132,7 @@ export default function CartPage() {
           color: white;
           border-radius: 0.3rem;
           margin: 1rem auto;
+          margin-bottom: 2rem;
           border: 1.5px solid ${dots && styles.primaryColorLight};
         }
 
