@@ -43,10 +43,10 @@ export default async (req, res) => {
         })
       );
       if (user.name) {
-        return res.end("exist");
+        return res.status(200).end("exist");
       }
-      return res.end("done");
-    } else return res.end("الرمز المؤقت غير صحيح");
+      return res.status(200).end("done");
+    } else return res.status(200).end("الرمز المؤقت غير صحيح");
   }
   return res.end("هناك خطأ في النظام يرجى المحاولة مجدداً");
 };

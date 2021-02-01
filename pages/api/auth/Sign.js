@@ -48,11 +48,6 @@ export default async (req, res) => {
           .services(process.env.VA_SID)
           .verifications.create({ to: receptor, channel: "sms" });
 
-        client.verify.services(process.env.VA_SID).verificationChecks.create({
-          to: receptor,
-          code: codeGenerator()
-        });
-
         return res.end("done");
       } else {
         res.end("يرجى ادخال الرقم بالشكل الصحيح");

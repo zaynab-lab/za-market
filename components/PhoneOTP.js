@@ -35,13 +35,7 @@ export default function PhoneOTP({ routeTo }) {
 
   const checkNumber = (action) => {
     setMessage(" ");
-    if (
-      !(
-        phoneNumber.length === 7 ||
-        phoneNumber.length === 8 ||
-        phoneNumber.length === 10
-      )
-    ) {
+    if (!(phoneNumber.length === 7 || phoneNumber.length === 8)) {
       setMessage("الرجاء التأكد من الرقم");
       return;
     }
@@ -61,6 +55,13 @@ export default function PhoneOTP({ routeTo }) {
             setWaiting(true);
             timer(119, setTime);
             setphone(phoneNumber);
+            axios
+              .post(
+                "/api/auth/Login",
+                { phoneNumber, oTP },
+                { "content-type": "application/json" }
+              )
+              .then((res) => console.log(res));
           } else {
             setMessage(res.data);
           }
