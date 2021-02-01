@@ -48,14 +48,11 @@ export default async (req, res) => {
           .services(process.env.VA_SID)
           .verifications.create({ to: receptor, channel: "sms" });
 
-        const status = await client.verify
+        await client.verify
           .services(process.env.VA_SID)
           .verificationChecks.create({
             to: receptor,
             code: codeGenerator()
-          })
-          .then((verification_check) => {
-            return verification_check.status;
           });
 
         return res.end("done");
