@@ -11,7 +11,6 @@ import OrderEnd from "../components/OrderEnd";
 import AddAddress from "../components/AddAdress";
 import SnakBar from "../components/SnakBar";
 import Switch, { toggleState } from "../components/Switch";
-import { orderCode } from "../util/dateChanger";
 
 export default function Proceed() {
   const cartList = useRecoilValue(cartListState);
@@ -34,23 +33,33 @@ export default function Proceed() {
   };
 
   useEffect(() => {
+    cartList[0] &&
+      axios
+        .post(
+          "/api/products/ids",
+          { ids: cartList.map((item) => item.id) },
+          { "content-type": "application/json" }
+        )
+        .then((res) => {
+          const { data } = res;
+          setProductList(data);
+        });
+  }, [cartList]);
+
+  useEffect(() => {
     axios.get("/api/auth").then((res) => {
       const { data } = res;
+
       if (data === "noToken" || data === "invalid") {
         Router.push("/Login?routeTo=cart");
       } else {
         setUser(data);
+
         cartList.length ? setRoute(false) : Router.push("/cart");
       }
     });
   }, [cartList.length]);
 
-  useEffect(() => {
-    axios.get("/api/products").then((res) => {
-      const { data } = res;
-      setProductList(data);
-    });
-  }, [setProductList]);
   useEffect(() => {
     setProceedProducts(
       productList
@@ -170,7 +179,6 @@ export default function Proceed() {
                         : fire("اختر العنوان المطلوب الإرسال إليه");
                     } else {
                       setDots(true);
-                      const newOrderCode = orderCode();
                       axios
                         .post(
                           "/api/orders",
@@ -180,8 +188,7 @@ export default function Proceed() {
                             payment,
                             selectedAddress,
                             toggle,
-                            delivery,
-                            orderCode: newOrderCode
+                            delivery
                           },
                           { "content-type": "application/json" }
                         )

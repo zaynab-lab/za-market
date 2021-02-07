@@ -48,13 +48,14 @@ export default function IndexPage() {
       <div className="container">
         {/* <OrderBar /> */}
         <SlideShow />
-        <div className="img">
-          <img width="200rem" src="/img/png/Flame.png" alt="" />
+        <div className="imgContainer">
+          <div className="img">
+            <img width="200rem" src="/img/png/Flame.png" alt="" />
+          </div>
+          <div className="img">
+            <img width="100rem" src="/img/png/Logo.png" alt="" />
+          </div>
         </div>
-        <div className="img">
-          <img width="160rem" src="/img/png/Logo.png" alt="" />
-        </div>
-
         <CategoryItems categories={categoryList} />
       </div>
       <SnakBar show={snak.show} message={snak.message} />
@@ -73,6 +74,10 @@ export default function IndexPage() {
         }
         .img {
           margin: auto;
+        }
+        .imgContainer {
+          display: flex;
+          align-items: space-evenly;
         }
       `}</style>
     </>

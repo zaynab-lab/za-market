@@ -30,11 +30,19 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    axios.get("/api/products").then((res) => {
-      const { data } = res;
-      setProductList(data);
-    });
-  }, [setProductList]);
+    cartList[0] &&
+      axios
+        .post(
+          "/api/products/ids",
+          { ids: cartList.map((item) => item.id) },
+          { "content-type": "application/json" }
+        )
+        .then((res) => {
+          const { data } = res;
+          setProductList(data);
+        });
+  }, [cartList]);
+
   useEffect(() => {
     setCartProducts(
       productList.filter((obj) =>
@@ -103,7 +111,6 @@ export default function CartPage() {
       </div>
 
       <SnakBar show={snak.show} message={snak.message} />
-
       <LoadData />
       <style jsx>{`
         .container {
