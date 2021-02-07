@@ -28,7 +28,7 @@ export default function Offers() {
           تمنحه 10000 ل.ل وفي حال استعماله للتطبيق سوف تحصل على 10000 ل.ل في
           رصيدك.
           <Link
-            href={`https://wa.me/?text=https://www.za-market.com/?code=${code}`}
+            href={"https://wa.me/?text=https://www.za-market.com/?code=" + code}
           >
             <span className="icon">
               <FaWhatsapp />
