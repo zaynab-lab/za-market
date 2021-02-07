@@ -27,7 +27,8 @@ export default async function Auth(req, res) {
           mail: user.mail,
           birth: user.birth,
           roles: user.roles,
-          pages: user.pages
+          pages: user.pages,
+          promoCode: user.promoCode
         })
       );
     });

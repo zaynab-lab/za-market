@@ -16,14 +16,14 @@ export default function Offers() {
         setCode(data.promoCode);
       }
     });
-  }, []);
+  }, [setCode]);
 
   return (
     <>
       <TopBar title="حسومات وقسائم شرائية" page={true} />
       <div className="container">
-        <div>شارك الرابط ورباح:</div>
-        <div>
+        <div className="title">شارك الرابط وارباح</div>
+        <div className="promoBox">
           في حال قمت بمشاركة الرابط وتم تسجيل الدخول من قبل المرسل إليه سوف
           تمنحه 10000 ل.ل وفي حال استعماله للتطبيق سوف تحصل على 10000 ل.ل في
           رصيدك.
@@ -34,22 +34,32 @@ export default function Offers() {
               <FaWhatsapp />
             </span>
           </Link>
+          <ul>
+            {user ? (
+              <li>لقد قمت بمشاركة الرابط لـ {user} عضو</li>
+            ) : (
+              <li>لم تتم عضوية أحد قمت بمشاركة الرابط له</li>
+            )}
+            {!order ? (
+              user ? (
+                <li>لم يتم أي عملية شراء من قبل الأعضاء الذين قمت بدعوتهم</li>
+              ) : (
+                <></>
+              )
+            ) : (
+              <li>تمت{order}عملية شراء من الأعضاء الذين قمت بمشاركتهم</li>
+            )}
+            <li>
+              لقد حصلت على {order * 10000} ل.ل بمشاركاتك الرابط، وقد أضيفت إلى
+              رصيدك
+            </li>
+          </ul>
         </div>
-        {user ? (
-          <div>لم تقم بمشاركة الرابط بعد</div>
-        ) : (
-          <div>لقد قمت بمشاركة الرابط لـ {user} عضو</div>
-        )}
-        {order ? (
-          user && (
-            <div>لم يتم أي عملية شراء من قبل الأعضاء الذين قمت بدعوتهم</div>
-          )
-        ) : (
-          <div>تمت{order}عملية شراء من الأعضاء الذين قمت بمشاركتهم</div>
-        )}
-        <div>لقد حصلت على {order * 10000} ل.ل بمشاركاتك، أضيفت إلى رصيدك</div>
-        <div>جمع نقاط مع ليال:</div>
-        <div>قريبا.....</div>
+
+        <div className="title">جمع نقاط مع ليال</div>
+        <div className="promoBox">
+          <div>قريبا.....</div>
+        </div>
       </div>
 
       <style jsx>{`
@@ -68,7 +78,23 @@ export default function Offers() {
           justify-content: center;
           align-items: center;
           color: white;
-          margin: 0 2rem;
+          margin: 0 0.2rem;
+        }
+        .title {
+          text-align: center;
+          padding: 0.3rem;
+          background: ${styles.thirdColor};
+          border: 1px solid ${styles.primaryColor};
+          border-raduis: 0.5rem;
+        }
+        .promoBox {
+          padding: 0.5rem;
+        }
+        ul {
+          padding: 1rem;
+        }
+        li {
+          font-size: 0.9rem;
         }
       `}</style>
     </>

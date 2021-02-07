@@ -36,11 +36,13 @@ export default function IndexPage() {
   };
   const router = useRouter();
   const { msg } = router.query;
+  const { code } = router.query;
 
   useEffect(() => {
+    code && localStorage.setItem("invitedBy", code);
     msg && fire(msg);
     msg && router.push("/");
-  }, [msg, router]);
+  }, [code, msg, router]);
 
   return (
     <>

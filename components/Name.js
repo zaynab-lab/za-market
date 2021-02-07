@@ -17,13 +17,14 @@ export default function Name({ routeTo }) {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [dots, setDots] = useState(false);
+  const invitedBy = localStorage.getItem("invitedBy");
 
   const handleClick = () => {
     setDots(true);
     axios
       .post(
         "/api/auth/SetName",
-        { phoneNumber, name },
+        { phoneNumber, name, invitedBy: invitedBy },
         { "content-type": "application/json" }
       )
       .then((res) => {

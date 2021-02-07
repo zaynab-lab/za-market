@@ -15,7 +15,8 @@ export default async (req, res) => {
       User.findByIdAndUpdate(
         user._id,
         {
-          name: body.name
+          name: body.name,
+          invitedBy: body.invitedBy
         },
         (err) => console.log(err)
       );
