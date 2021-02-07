@@ -6,6 +6,7 @@ import { styles } from "../public/js/styles";
 import Router from "next/router";
 import ContactUs from "./ContactUs";
 import timer from "../util/timer";
+import Dots from "./Loaders/Dots";
 
 export const phoneState = atom({
   key: "phone",
@@ -22,6 +23,7 @@ export default function PhoneOTP({ routeTo }) {
   const [passWord, setPassWord] = useState("");
   const [message, setMessage] = useState(" ");
   const [time, setTime] = useState("02:00");
+  const [dots, setDots] = useState(false);
 
   const handleChange = (e) => {
     setMessage(" ");
@@ -44,6 +46,7 @@ export default function PhoneOTP({ routeTo }) {
 
   const requestOTP = () => {
     checkNumber(() => {
+      setDots(true);
       axios
         .post(
           "/api/auth/Sign",
@@ -55,6 +58,7 @@ export default function PhoneOTP({ routeTo }) {
             setWaiting(true);
             timer(119, setTime);
             setphone(phoneNumber);
+            setDots(false);
             axios
               .post(
                 "/api/auth/Login",
@@ -69,6 +73,7 @@ export default function PhoneOTP({ routeTo }) {
     });
   };
   const login = () => {
+    setDots(true);
     axios
       .post(
         "/api/auth/Login",
@@ -141,11 +146,11 @@ export default function PhoneOTP({ routeTo }) {
           <div className="btnContainer">
             {waiting ? (
               <button className="btn" onClick={() => login()}>
-                تسجيل الدخول
+                {dots ? <Dots /> : "تسجيل الدخول"}
               </button>
             ) : (
               <button className="btn" onClick={() => requestOTP()}>
-                طلب الرمز المؤقت
+                {dots ? <Dots /> : "طلب الرمز المؤقت"}
               </button>
             )}
             <button

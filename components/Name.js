@@ -4,6 +4,7 @@ import axios from "axios";
 import { phoneState } from "./PhoneOTP";
 import { styles } from "../public/js/styles";
 import Router from "next/router";
+import Dots from "./Loaders/Dots";
 
 export const userNameState = atom({
   key: "userName",
@@ -15,8 +16,10 @@ export default function Name({ routeTo }) {
   const phoneNumber = useRecoilValue(phoneState);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const [dots, setDots] = useState(false);
 
   const handleClick = () => {
+    setDots(true);
     axios
       .post(
         "/api/auth/SetName",
@@ -54,7 +57,7 @@ export default function Name({ routeTo }) {
       />
 
       <button className="btn" onClick={() => handleClick()}>
-        تأكيد
+        {dots ? <Dots /> : "تأكيد"}
       </button>
 
       <style jsx>{`
