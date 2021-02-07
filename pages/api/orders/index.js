@@ -2,12 +2,12 @@ import dbConnection from "../../../util/dbConnection";
 import User from "../../../models/user";
 import jwt from "jsonwebtoken";
 import Order from "../../../models/order";
+import { orderCode } from "../../../util/dateChanger";
 
 dbConnection();
 
 export default async (req, res) => {
   const { method } = req;
-
   switch (method) {
     case "POST":
       try {
@@ -18,24 +18,26 @@ export default async (req, res) => {
           if (err) return res.end("invalid");
           const user = await User.findById(decoded.id).exec();
           var shouldpay = body.total + body.delivery;
-          if (body.toggle) {
-            shouldpay =
-              body.total + body.delivery - user.amount > 0
-                ? body.total + body.delivery - user.amount
-                : 0;
-            const amount =
-              user.amount - (body.total + body.delivery) > 0
-                ? user.amount - (body.total + body.delivery)
-                : 0;
-            User.findByIdAndUpdate(user._id, { amount: amount }, (err) => {
-              return err && res.end("invalid");
-            }).exec();
-          }
           if (user) {
+            if (body.toggle) {
+              shouldpay =
+                body.total + body.delivery - user.amount > 0
+                  ? body.total + body.delivery - user.amount
+                  : 0;
+              const amount =
+                user.amount - (body.total + body.delivery) > 0
+                  ? user.amount - (body.total + body.delivery)
+                  : 0;
+              User.findByIdAndUpdate(user._id, { amount: amount }, (err) => {
+                return err && res.end("invalid");
+              }).exec();
+            }
+            const newOrderCode = orderCode();
+
             const order = new Order({
               userID: user._id,
               userName: user.name,
-              orderCode: body.orderCode,
+              orderCode: newOrderCode,
               ordertimes: user.ordertimes + 1,
               number: user.number,
               products: body.proceedProducts,

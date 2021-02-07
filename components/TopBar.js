@@ -5,8 +5,12 @@ import { useRecoilValue } from "recoil";
 import { cartListState } from "../pages/cart";
 import { styles } from "../public/js/styles";
 import Loader from "./Loader";
-import LoadData from "./LoadData";
-import { FaArrowRight, FaHome, FaShoppingCart } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaHome,
+  FaShoppingCart
+} from "react-icons/fa";
 
 export default function TopBar({ title, page, cart, main }) {
   const cartList = useRecoilValue(cartListState);
@@ -65,6 +69,14 @@ export default function TopBar({ title, page, cart, main }) {
               <span role="img" aria-label="cart">
                 <FaShoppingCart />
               </span>
+              {quantity ? (
+                <span className="showCart">
+                  عربة التسوق
+                  <FaArrowLeft />
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
           </Link>
         ) : (
@@ -127,6 +139,54 @@ export default function TopBar({ title, page, cart, main }) {
           padding-bottom: 0;
           font-size: 1.2rem;
           color: ${styles.secondaryColor};
+        }
+
+        .showCart {
+          font-size: 0.8rem;
+          position: absolute;
+          left: 3.2rem;
+          color: white;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          opacity: 0;
+          -webkit-animation-name: Arrow;
+          animation-name: Arrow;
+          -webkit-animation-duration: 4s;
+          animation-duration: 4s;
+          -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+        }
+        @-webkit-keyframes Arrow {
+          0 {
+            opacity: 0;
+          }
+          20% {
+            opacity: 0;
+          }
+          80% {
+            opacity: 100%;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+        @keyframes Arrow {
+          0 {
+            opacity: 0;
+          }
+          20% {
+            opacity: 0;
+          }
+          80% {
+            opacity: 100%;
+          }
+          100% {
+            opacity: 0;
+          }
         }
 
         .point {
