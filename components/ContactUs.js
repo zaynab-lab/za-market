@@ -7,7 +7,7 @@ export default function ContactUs() {
     <>
       <div className="contactUs">
         <div>في حال مواجهة أي مشكلة</div>
-        <Link href="https://wa.me/+96181026095?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C">
+        <Link href="https://wa.me/+96170097533?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C">
           <div className="contactbtn">
             <FaWhatsapp /> <span>تواصل معنا</span>
           </div>

@@ -32,7 +32,7 @@ export default function IndexPage() {
   const [snak, setSnak] = useState("");
   const fire = (message) => {
     setSnak({ message, show: true });
-    setTimeout(() => setSnak(""), 3000);
+    setTimeout(() => setSnak(""), 4000);
   };
   const router = useRouter();
   const { msg } = router.query;

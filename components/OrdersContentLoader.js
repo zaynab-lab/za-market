@@ -6,7 +6,6 @@ export default function OrdersContentLoader() {
     <>
       <div className="loading">
         <div className="loading-title">لا يوجد طلبيات</div>
-
         <div className="svg">
           <FaTruck />
         </div>
@@ -34,6 +33,34 @@ export default function OrdersContentLoader() {
         .loading-title {
           font-size: 1.2rem;
           color: ${styles.secondaryColor};
+          opacity: 0;
+          -webkit-animation-name: title;
+          animation-name: title;
+          -webkit-animation-duration: 5s;
+          animation-duration: 5s;
+        }
+        @-webkit-keyframes title {
+          0 {
+            opacity: 0;
+          }
+          80% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
+        }
+
+        @keyframes title {
+          0 {
+            opacity: 0;
+          }
+          80% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 100%;
+          }
         }
 
         .svg {

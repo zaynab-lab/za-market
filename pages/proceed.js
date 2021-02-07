@@ -29,7 +29,7 @@ export default function Proceed() {
   const [user, setUser] = useState("");
   const fire = (message) => {
     setSnak({ message, show: true });
-    setTimeout(() => setSnak(""), 3000);
+    setTimeout(() => setSnak(""), 4000);
   };
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function Proceed() {
       );
   }, [setProceedProducts, productList, cartList]);
   useEffect(() => {
-    total > 30000 && setDelivery(0);
+    total > 80000 && setDelivery(0);
   }, [total]);
 
   return (

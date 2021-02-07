@@ -264,7 +264,7 @@ export default function PhoneOTP({ routeTo }) {
         .btn {
           font-size: 1.1rem;
           border: none;
-          background-color: ${styles.primaryColorLight};
+          background-color: ${dots ? "white" : styles.primaryColorLight};
           color: white;
           margin: 0.5rem;
           padding: 0.5rem 0.8rem;

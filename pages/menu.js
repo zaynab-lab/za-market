@@ -96,10 +96,11 @@ export default function Menu() {
                       شحن
                     </button>
                   </li>
-
-                  <li>
-                    <FaPercentage /> <span>حسومات وقسائم شرائية</span>
-                  </li>
+                  <Link href="/details/offers">
+                    <li>
+                      <FaPercentage /> <span>حسومات وقسائم شرائية</span>
+                    </li>
+                  </Link>
 
                   <Link href="/details/orders">
                     <li onClick={() => setDots(true)}>
@@ -122,7 +123,7 @@ export default function Menu() {
             </li>
           </Link>
 
-          <Link href="https://wa.me/+96181026095?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C+%D8%A8%D8%AF%D9%8A+%D8%AA%D8%B3%D8%A7%D8%B9%D8%AF%D9%86%D9%8A+%D8%A8%D9%80">
+          <Link href="https://wa.me/+96170097533?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C+%D8%A8%D8%AF%D9%8A+%D8%AA%D8%B3%D8%A7%D8%B9%D8%AF%D9%86%D9%8A+%D8%A8%D9%80">
             <li>
               <FaWhatsapp /> <span>اتصل بنا</span>
             </li>

@@ -111,18 +111,22 @@ export default function Orders({ current, orderList }) {
   useEffect(() => {
     current
       ? setCurrentList(
-          orderList.filter(
-            (obj) =>
-              obj.progress.cancelation.done !== current &&
-              obj.progress.arrive.done !== current
-          )
+          orderList
+            .filter(
+              (obj) =>
+                obj.progress.cancelation.done !== current &&
+                obj.progress.arrive.done !== current
+            )
+            .reverse()
         )
       : setCurrentList(
-          orderList.filter(
-            (obj) =>
-              obj.progress.arrive.done !== current ||
-              obj.progress.cancelation.done !== current
-          )
+          orderList
+            .filter(
+              (obj) =>
+                obj.progress.arrive.done !== current ||
+                obj.progress.cancelation.done !== current
+            )
+            .reverse()
         );
   }, [orderList, current]);
 

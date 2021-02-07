@@ -99,7 +99,7 @@ export default function Name({ routeTo }) {
         .btn {
           font-size: 1.2rem;
           border: none;
-          background-color: ${styles.primaryColorLight};
+          background-color: ${dots ? "white" : styles.primaryColorLight};
           color: white;
           margin: 0.5rem;
           padding: 0.2rem 0.5rem;

@@ -26,7 +26,7 @@ export default function CartPage() {
   const [snak, setSnak] = useState("");
   const fire = (message) => {
     setSnak({ message, show: true });
-    setTimeout(() => setSnak(""), 3000);
+    setTimeout(() => setSnak(""), 4000);
   };
 
   useEffect(() => {
