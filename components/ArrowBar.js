@@ -7,9 +7,21 @@ import {
   FaTimesCircle,
   FaTruck
 } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
 
 export default function ArrowBar({ progress }) {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    submit: { en: "Submitting order", ar: "تسجيل الطلبية" },
+    preparation: { en: "Preparing order", ar: "تحضير الطلبية" },
+    audit: { en: "Checking order", ar: "تدقيق الطلبية" },
+    dispatch: { en: "Dispatching order", ar: "الإرسال" },
+    done: { en: "Delivered", ar: "التسليم" },
+    canceled: { en: "Canceled", ar: "تم إلغاء الطلب" },
+    returned: { en: "Returned", ar: "تم إرجاع الطلب" }
+  };
   const [state, setState] = useState({
     preparation: progress.preparation.done,
     audit: progress.audit.done,
@@ -25,14 +37,14 @@ export default function ArrowBar({ progress }) {
           <span className="icon">
             <FaCheckCircle />
           </span>
-          <span>تسجيل الطلبية</span>
+          <span>{dictionary.submit[lang]}</span>
         </div>
         {(!state.cancel || state.preparation) && (
           <div className={`step ${state.preparation && "done"}`}>
             <span className="icon">
               <FaShoppingBag />
             </span>
-            <span>تحضير الطلبية</span>
+            <span>{dictionary.preparation[lang]}</span>
           </div>
         )}
         {(!state.cancel || state.audit) && (
@@ -40,7 +52,7 @@ export default function ArrowBar({ progress }) {
             <span className="icon">
               <FaSearchPlus />
             </span>
-            <span>تدقيق الطلبية</span>
+            <span>{dictionary.audit[lang]}</span>
           </div>
         )}
         {(!state.cancel || state.dispatch) && (
@@ -48,7 +60,7 @@ export default function ArrowBar({ progress }) {
             <span className="icon">
               <FaTruck />
             </span>
-            <span>الإرسال</span>
+            <span>{dictionary.dispatch[lang]}</span>
           </div>
         )}
         {(!state.cancel || state.arrive) && (
@@ -56,7 +68,7 @@ export default function ArrowBar({ progress }) {
             <span className="icon">
               <FaSmileWink />
             </span>
-            <span>التسليم</span>
+            <span>{dictionary.done[lang]}</span>
           </div>
         )}
         {state.cancel && (
@@ -64,7 +76,7 @@ export default function ArrowBar({ progress }) {
             <span className="icon">
               <FaTimesCircle />
             </span>
-            <span>تم إلغاء الطلب</span>
+            <span>{dictionary.canceled[lang]}</span>
           </div>
         )}
         {!state.cancel && state.return && (
@@ -72,7 +84,7 @@ export default function ArrowBar({ progress }) {
             <span className="icon">
               <FaTimesCircle />
             </span>
-            <span>تم إرجاع الطلب</span>
+            <span>{dictionary.returned[lang]}</span>
           </div>
         )}
       </div>
@@ -90,8 +102,9 @@ export default function ArrowBar({ progress }) {
           cursor: default;
           margin: 0 1px 0 0;
           padding: 0.2rem;
-          width: 9rem;
-          float: right;
+          width: ${lang === "en" ? "11rem" : "9rem"};
+          ${lang === "en" && "height:2.1rem"};
+          float: ${lang === "en" ? "left" : "right"};
           position: relative;
           background-color: #f6f6f6;
           -webkit-user-select: none;
@@ -114,18 +127,22 @@ export default function ArrowBar({ progress }) {
           content: "";
           position: absolute;
           top: 0;
-          left: -1rem;
+          ${lang === "en" ? "right:-1rem" : "left:-1rem"};
           width: 0;
           height: 0;
           border-top: 1rem solid transparent;
           border-bottom: 1.1rem solid transparent;
-          border-right: 1rem solid #f6f6f6;
+          ${lang === "en"
+            ? "border-left: 1rem solid #f6f6f6"
+            : "border-right: 1rem solid #f6f6f6"};
           z-index: 2;
         }
         .arrow-steps .step:before {
-          left: auto;
-          right: 0;
-          border-right: 17px solid #fff;
+          left: ${lang === "en" ? "0" : "auto"};
+          right: ${lang === "en" ? "auto" : "0"};
+          ${lang === "en"
+            ? "border-left: 17px solid #fff            "
+            : "border-right: 17px solid #fff"};
           z-index: 0;
         }
         .arrow-steps .step:first-child:before {
@@ -141,7 +158,9 @@ export default function ArrowBar({ progress }) {
         }
 
         .arrow-steps .step.done:after {
-          border-right: 17px solid ${styles.secondaryColor};
+          ${lang === "en"
+            ? "border-left: 17px solid " + styles.secondaryColor
+            : "border-right: 17px solid" + styles.secondaryColor};
         }
 
         .icon {

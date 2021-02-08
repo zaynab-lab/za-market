@@ -4,7 +4,6 @@ import { langState } from "../pages/menu";
 
 const Layout = ({ children }) => {
   const lang = useRecoilValue(langState);
-
   return (
     <>
       <Head>
@@ -16,7 +15,6 @@ const Layout = ({ children }) => {
         * {
           margin: 0;
           padding: 0;
-          font-weight: bold;
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
           text-decoration: unset;

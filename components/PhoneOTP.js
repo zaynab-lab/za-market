@@ -142,8 +142,8 @@ export default function PhoneOTP({ routeTo }) {
           </div>
           <div className="phoneContainer">
             <select className="countryCode">
-              <option>961+</option>
-              <option>1+</option>
+              <option>+961</option>
+              <option>+1</option>
             </select>
             <input
               placeholder={dictionary.insertphone[lang]}
@@ -188,7 +188,7 @@ export default function PhoneOTP({ routeTo }) {
               </button>
             ) : (
               <button className="btn" onClick={() => requestOTP()}>
-                {dots ? <Dots /> : dictionary.requestOtp}
+                {dots ? <Dots /> : dictionary.requestOtp[lang]}
               </button>
             )}
             <button
@@ -197,7 +197,7 @@ export default function PhoneOTP({ routeTo }) {
                 setHasPass(!hasPass);
               }}
             >
-              {hasPass ? dictionary.dntHave : dictionary.have[lang]}
+              {hasPass ? dictionary.dntHave[lang] : dictionary.have[lang]}
             </button>
           </div>
           {waiting && time === "00:00" && (
@@ -236,9 +236,9 @@ export default function PhoneOTP({ routeTo }) {
           display: -ms-flexbox;
           display: flex;
           -webkit-box-orient: horizontal;
-          -webkit-box-direction: reverse;
-          -ms-flex-direction: row-reverse;
-          flex-direction: row-reverse;
+          -webkit-box-direction: ${lang === "en" ? "row" : "reverse"};
+          -ms-flex-direction: ${lang === "en" ? "row" : "row-reverse"};
+          flex-direction: ${lang === "en" ? "row" : "row-reverse"};
           margin: 0.8rem auto;
           max-width: 100vw;
         }

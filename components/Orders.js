@@ -37,8 +37,9 @@ const OrderItem = ({ currentList, index }) => {
               {currentList.total}
               <span className="currency">{dictionary.LBP[lang]}</span>
             </span>
-            <span className="label">
-              {dictionary.orderCode[lang]}: {currentList.orderCode}
+            <span>
+              <span className="label">{dictionary.orderCode[lang]}: </span>
+              {currentList.orderCode}
             </span>
           </div>
           <div className="totalbar">
@@ -90,8 +91,8 @@ const OrderItem = ({ currentList, index }) => {
         }
         .footer div {
           -webkit-box-flex: 1;
-          -ms-flex: 1 0 46rem;
-          flex: 1 0 46rem;
+          -ms-flex: 1 0 ${lang === "en" ? "58rem" : "46rem"};
+          flex: 1 0 ${lang === "en" ? "58rem" : "46rem"};
         }
         .footer span {
           -webkit-box-flex: 1;

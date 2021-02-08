@@ -1,5 +1,7 @@
 import axios from "axios";
 import { FaBan, FaCheckCircle, FaEdit } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import { langState } from "../../../pages/menu";
 import { styles } from "../../../public/js/styles";
 
 export default function OrderControll({
@@ -8,6 +10,12 @@ export default function OrderControll({
   current,
   handleRemove
 }) {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    completeStep: { en: "Complete the step", ar: "إتمام المرحلة" },
+    editOrder: { en: "Edit the order", ar: "تعديل الطلبية" },
+    cancelOrder: { en: "Cancel the order", ar: "إلغاء الطلبية" }
+  };
   return (
     <>
       <div className="controlBar">
@@ -31,7 +39,7 @@ export default function OrderControll({
               <span className="icon">
                 <FaCheckCircle />
               </span>
-              <span>إتمام المرحلة</span>
+              <span>{dictionary.completeStep[lang]}</span>
             </div>
 
             {permissions.includes("edit orders") && (
@@ -40,7 +48,7 @@ export default function OrderControll({
                   <span className="icon">
                     <FaEdit />
                   </span>
-                  <span>تعديل الطلبية</span>
+                  <span>{dictionary.editOrder[lang]}</span>
                 </div>
                 <div
                   className="cancel"
@@ -60,7 +68,7 @@ export default function OrderControll({
                   <span className="icon">
                     <FaBan />
                   </span>
-                  <span>إلغاء الطلبية</span>
+                  <span>{dictionary.cancelOrder[lang]}</span>
                 </div>
               </>
             )}

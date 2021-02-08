@@ -12,7 +12,7 @@ export default function OrdersPage() {
   const dictionary = {
     orders: { en: "Orders", ar: "الطلبيات" },
     current: { en: "Current", ar: "الحالية" },
-    previos: { en: "Previos", ar: "السابقة" }
+    previous: { en: "Previous", ar: "السابقة" }
   };
   const [current, setCurrent] = useState(true);
   const [orderList, setOrderList] = useState([]);
@@ -45,7 +45,7 @@ export default function OrdersPage() {
               setCurrent(false);
             }}
           >
-            {dictionary.previos[lang]}
+            {dictionary.previous[lang]}
           </div>
         </div>
         <Orders current={current} orderList={orderList} />

@@ -4,6 +4,8 @@ import OrderEnd from "../../../components/OrderEnd";
 import { FaCalendarAlt, FaMapMarkedAlt } from "react-icons/fa";
 import OrderControll from "./OrderControll";
 import dateChanger from "../../../util/dateChanger";
+import { useRecoilValue } from "recoil";
+import { langState } from "../../../pages/menu";
 
 export default function OrderItem({
   order,
@@ -11,6 +13,19 @@ export default function OrderItem({
   current,
   handleRemove
 }) {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    orderDate: { en: "Order Date", ar: "تاريخ الطلب" },
+    total: { en: "Total", ar: "الإجمالي" },
+    delivery: { en: "Delivery", ar: "توصيل" },
+    orderCode: { en: "Order Code", ar: "رقم الطلب" },
+    required: { en: "Required", ar: "المطلوب" },
+    steps: { en: "Steps", ar: "المراحل" },
+    address: { en: "Address", ar: "العنوان" },
+    customer: { en: "Customer", ar: "اسم الزبون" },
+    number: { en: "Phone Number", ar: "الرقم" },
+    LBP: { en: "LBP", ar: "ل.ل" }
+  };
   const [hidden, setHidden] = useState(true);
 
   return (
@@ -19,7 +34,7 @@ export default function OrderItem({
         <div className="header" onClick={() => setHidden(!hidden)}>
           <div>
             <span className="label">
-              <FaCalendarAlt /> تاريخ الطلب:{" "}
+              <FaCalendarAlt /> {dictionary.orderDate[lang]}:{" "}
             </span>
             {dateChanger(order.date)}
           </div>
@@ -27,36 +42,43 @@ export default function OrderItem({
             <>
               <div className="totalbar">
                 <span>
-                  <span className="label">الإجمالي:</span> {order.total} ل.ل
-                </span>{" "}
+                  <span className="label">{dictionary.total[lang]}:</span>{" "}
+                  {order.total}
+                  <span className="currency">{dictionary.LBP[lang]}</span>
+                </span>
                 <span>
-                  <span className="label">رقم الطلب:</span> {order.orderCode}
+                  <span className="label">{dictionary.orderCode[lang]}:</span>{" "}
+                  {order.orderCode}
                 </span>
               </div>
               <div className="totalbar">
                 <span>
-                  <span className="label">توصيل: </span>
-                  {order.delivery} ل.ل
-                </span>{" "}
+                  <span className="label">{dictionary.delivery[lang]}: </span>
+                  {order.delivery}
+                  <span className="currency">{dictionary.LBP[lang]}</span>
+                </span>
                 <span>
-                  <span className="label">المطلوب: </span>
-                  {order.shouldpay} ل.ل
-                </span>{" "}
+                  <span className="label">{dictionary.required[lang]}: </span>
+                  {order.shouldpay}
+                  <span className="currency">{dictionary.LBP[lang]}</span>
+                </span>
               </div>
 
               <div>
                 <span className="label">
-                  <FaMapMarkedAlt /> العنوان:
-                </span>{" "}
+                  <FaMapMarkedAlt /> {dictionary.address[lang]}:
+                </span>
                 {order.address}
               </div>
 
               <div className="totalbar">
                 <span>
-                  <span className="label">اسم الزبون:</span> {order.userName}
+                  <span className="label">{dictionary.customer[lang]}:</span>{" "}
+                  {order.userName}
                 </span>
                 <span>
-                  <span className="label">الرقم:</span> {order.number}
+                  <span className="label">{dictionary.number[lang]}:</span>{" "}
+                  {order.number}
                 </span>
               </div>
             </>
@@ -105,6 +127,9 @@ export default function OrderItem({
 
         .footer span {
           flex: 1 0 5rem;
+        }
+        .currency {
+          padding: 0.2rem;
         }
 
         .totalbar {

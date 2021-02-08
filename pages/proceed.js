@@ -55,6 +55,10 @@ export default function Proceed() {
     chooseAddress: {
       en: "Choose an address from your list",
       ar: "اختر العنوان المطلوب الإرسال إليه"
+    },
+    orderDone: {
+      en: "The order has been submitted successfully",
+      ar: "تم تسجيل الطلبية بنجاح"
     }
   };
 
@@ -75,12 +79,10 @@ export default function Proceed() {
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
       const { data } = res;
-
       if (data === "noToken" || data === "invalid") {
         Router.push("/Login?routeTo=cart");
       } else {
         setUser(data);
-
         cartList.length ? setRoute(false) : Router.push("/cart");
       }
     });
@@ -231,7 +233,7 @@ export default function Proceed() {
                         .then((res) => {
                           const { data } = res;
                           data === "done" && setDots(false);
-                          data === "done" && fire("تم تسجيل الطلبية بنجاح");
+                          data === "done" && fire(dictionary.orderDone[lang]);
                         })
                         .then(() => {
                           localStorage.setItem("cartList", JSON.stringify([]));
