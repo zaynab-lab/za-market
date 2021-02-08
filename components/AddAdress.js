@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
 import Input from "./Input";
 import Dots from "./Loaders/Dots";
@@ -14,8 +16,25 @@ const addressInputList = [
 ];
 
 const ModalContent = ({ setModal, setnewAddress }) => {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    beirut: { en: "Beirut", ar: "بيروت" },
+    addAddress: { en: "Add Address", ar: "اضف عنوان" },
+    fill: {
+      en: "Fill required fields",
+      ar: "املاء الخانات اللازمة، واللتي تحتوي على نجمة*"
+    },
+    floor: {
+      en: "Floor should be in numbers",
+      ar: "يجب أدخال الطابق بالأرقام"
+    },
+    retry: {
+      en: "Please re-enter the address, an error occurred",
+      ar: "نرجو المحاولة مجددا، هناك خطأ في العملية"
+    }
+  };
   const [state, setState] = useState({
-    city: "بيروت",
+    city: dictionary.beirut[lang],
     region: "",
     street: "",
     building: "",
@@ -29,13 +48,14 @@ const ModalContent = ({ setModal, setnewAddress }) => {
 
   return (
     <>
-      <div className="header">اضف عنوان</div>
+      <div className="header">{dictionary.addAddress[lang]}</div>
       <select
         className="select"
         onChange={(e) => setState({ ...state, city: e.target.value })}
       >
-        <option value="بيروت">بيروت</option>
-        <option value="النبطية">النبطية</option>
+        <option value={dictionary.beirut[lang]}>
+          {dictionary.beirut[lang]}
+        </option>
       </select>
       {addressInputList.map((obj, index) => (
         <Input
@@ -64,8 +84,8 @@ const ModalContent = ({ setModal, setnewAddress }) => {
                     state.region === "" ||
                     state.street === ""
                   ) {
-                    alert("املاء الخانات اللازمة، واللتي تحتوي على نجمة*");
-                    alert("يجب أدخال الطابق بالأرقام");
+                    alert(dictionary.fill[lang]);
+                    alert(dictionary.floor[lang]);
                     setDots(false);
                   } else {
                     const fadd =
@@ -91,7 +111,7 @@ const ModalContent = ({ setModal, setnewAddress }) => {
                         data === "done" && setnewAddress(fadd);
                         data === "done" &&
                           setState({
-                            city: "بيروت",
+                            city: dictionary.beirut[lang],
                             region: "",
                             street: "",
                             building: "",
@@ -99,14 +119,13 @@ const ModalContent = ({ setModal, setnewAddress }) => {
                             details: ""
                           });
                         data === "done" && setModal(false);
-                        data !== "done" &&
-                          alert("نرجو المحاولة مجددا، هناك خطأ في العملية");
+                        data !== "done" && alert(dictionary.retry[lang]);
                         setDots(false);
                       });
                   }
                 }}
               >
-                اضافة
+                {dictionary.addAddress[lang]}
               </div>
             )}
           </button>
@@ -158,7 +177,11 @@ export default function AddAddress({ setSelectedAddress, setHasAddress }) {
   const [modal, setModal] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [addedAddress, setAddedAddress] = useState("");
-
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    addAddress: { en: "Add Address", ar: "اضافة عنوان" },
+    chooseAddress: { en: "Choose Address", ar: "اختر عنوان" }
+  };
   const setnewAddress = (newAddress) => {
     const a = [...addresses, { content: newAddress }];
     setSelectedAddress(newAddress);
@@ -185,7 +208,7 @@ export default function AddAddress({ setSelectedAddress, setHasAddress }) {
             className="select-address"
             onChange={(e) => setSelectedAddress(e.target.value)}
           >
-            <option value="">اختر عنوان</option>
+            <option value="">{dictionary.chooseAddress[lang]}</option>
             {addresses.map((obj, index) => (
               <option
                 key={index}
@@ -203,7 +226,7 @@ export default function AddAddress({ setSelectedAddress, setHasAddress }) {
             setModal(true);
           }}
         >
-          اضافة عنوان
+          {dictionary.addAddress[lang]}
         </button>
       </div>
       {modal && (
@@ -236,7 +259,7 @@ export default function AddAddress({ setSelectedAddress, setHasAddress }) {
         }
         .addbtn {
           display: block;
-          margin-right: 0.5rem;
+          ${lang === "en" ? "margin-left: 0.5rem" : "margin-right: 0.5rem"};
           color: white;
           background: ${styles.primaryColorLight};
           border: none;

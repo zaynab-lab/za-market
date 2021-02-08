@@ -11,11 +11,17 @@ import {
   FaHome,
   FaShoppingCart
 } from "react-icons/fa";
+import { langState } from "../pages/menu";
 
 export default function TopBar({ title, page, cart, main }) {
   const cartList = useRecoilValue(cartListState);
   const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(false);
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    cart: { en: "Cart", ar: "عربة التسوق" },
+    left: { en: true }
+  };
 
   useEffect(() => {
     cartList.length
@@ -35,7 +41,7 @@ export default function TopBar({ title, page, cart, main }) {
                 Router.back();
               }}
             >
-              <FaArrowRight />
+              {dictionary.left[lang] ? <FaArrowLeft /> : <FaArrowRight />}
             </div>
           ) : (
             <div
@@ -66,13 +72,15 @@ export default function TopBar({ title, page, cart, main }) {
           <Link href="/cart">
             <div className="cart" onClick={() => setLoading(true)}>
               <span className="point">{quantity}</span>
-              <span role="img" aria-label="cart">
+              <span className="cartimg" role="img" aria-label="cart">
                 <FaShoppingCart />
               </span>
               {quantity ? (
                 <span className="showCart">
-                  عربة التسوق
-                  <FaArrowLeft />
+                  {dictionary.cart[lang]}
+                  <span className="showCartArrow">
+                    {dictionary.left[lang] ? <FaArrowRight /> : <FaArrowLeft />}
+                  </span>
                 </span>
               ) : (
                 <></>
@@ -109,6 +117,7 @@ export default function TopBar({ title, page, cart, main }) {
           -ms-transform: rotate(90deg);
           transform: rotate(90deg);
           font-size: 1.6rem;
+          padding: 0 0.2rem;
         }
         .arrow {
           font-size: 1.6rem;
@@ -118,9 +127,7 @@ export default function TopBar({ title, page, cart, main }) {
         }
         .home {
           font-size: 1.6rem;
-          -webkit-transform: translateX(-0.5rem);
-          -ms-transform: translateX(-0.5rem);
-          transform: translateX(-0.5rem);
+          padding: 0 0.5rem;
         }
         .cart {
           display: -webkit-box;
@@ -140,11 +147,14 @@ export default function TopBar({ title, page, cart, main }) {
           font-size: 1.2rem;
           color: ${styles.secondaryColor};
         }
+        .cartimg {
+          ${dictionary.left && "transform: scaleX(-1)"};
+        }
 
         .showCart {
           font-size: 0.8rem;
           position: absolute;
-          left: 3.2rem;
+          ${dictionary.left[lang] ? "right:3.2rem" : "left: 3.2rem"};
           color: white;
           display: -webkit-box;
           display: -ms-flexbox;
@@ -159,6 +169,9 @@ export default function TopBar({ title, page, cart, main }) {
           animation-duration: 4s;
           -webkit-animation-iteration-count: infinite;
           animation-iteration-count: infinite;
+        }
+        .showCartArrow {
+          padding: 0 0.2rem;
         }
         @-webkit-keyframes Arrow {
           0 {
@@ -195,9 +208,18 @@ export default function TopBar({ title, page, cart, main }) {
           background: white;
           border: 1px solid ${styles.primaryColorLight};
           position: absolute;
-          -webkit-transform: translate(1.2rem, -0.85rem);
-          -ms-transform: translate(1.2rem, -0.85rem);
-          transform: translate(1.2rem, -0.85rem);
+          -webkit-transform: translate(
+            ${dictionary.left[lang] ? "-1.2rem" : "1.2rem"},
+            -0.85rem
+          );
+          -ms-transform: translate(
+            ${dictionary.left[lang] ? "-1.2rem" : "1.2rem"},
+            -0.85rem
+          );
+          transform: translate(
+            ${dictionary.left[lang] ? "-1.2rem" : "1.2rem"},
+            -0.85rem
+          );
           border-radius: 1rem;
           font-size: 0.9rem;
           display: -webkit-box;

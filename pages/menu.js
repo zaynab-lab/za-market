@@ -11,6 +11,7 @@ import {
   FaDollarSign,
   FaFileContract,
   FaIdCard,
+  FaLanguage,
   FaMugHot,
   FaPercentage,
   FaTruckLoading,
@@ -22,12 +23,34 @@ export const userState = atom({
   default: {}
 });
 
+export const langState = atom({
+  key: "lang",
+  default: "en"
+});
+
 export default function Menu() {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [lang, setLang] = useRecoilState(langState);
   const [dots, setDots] = useState(true);
   const [user, setUser] = useState(userInfo !== {} ? userInfo : "");
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
+
+  const dictionary = {
+    settings: { en: "Settings", ar: "الإعدادات" },
+    login: { en: "Log in", ar: "تسجيل الدخول" },
+    profile: { en: "Profile", ar: "الملف الشخصي" },
+    credit: { en: "Credit", ar: "الرصيد" },
+    charge: { en: "Charge", ar: "شحن" },
+    discounts: { en: "Discounts & Copuns", ar: "حسومات وقسائم شرائية" },
+    orders: { en: "Orders", ar: "الطلبيات" },
+    rights: { en: "Customer's rights", ar: "حقوق الزبون" },
+    conditions: { en: "Using Conditions", ar: "شروط الاستخدام" },
+    language: { en: "Language", ar: "اللغة" },
+    contact: { en: "Contact us", ar: "اتصل بنا" },
+    alert: { en: "Comming Soon", ar: "الخدمة قيد التطوير" },
+    LBP: { en: "LBP", ar: "ل.ل" }
+  };
 
   useEffect(() => {
     axios
@@ -46,7 +69,7 @@ export default function Menu() {
 
   return (
     <>
-      <TopBar title="الإعدادات" page={true} />
+      <TopBar title={dictionary.settings[lang]} page={true} />
       {loading && <Loader />}
       <div className="container">
         <div className="menu-header">
@@ -62,7 +85,9 @@ export default function Menu() {
                 <Dots />
               ) : (
                 <Link href="/Login">
-                  <span onClick={() => setDots(true)}>تسجيل الدخول</span>
+                  <span onClick={() => setDots(true)}>
+                    {dictionary.login[lang]}
+                  </span>
                 </Link>
               )}
             </>
@@ -80,31 +105,36 @@ export default function Menu() {
                 <>
                   <Link href="/details/profile">
                     <li onClick={() => setDots(true)}>
-                      <FaIdCard /> <span>الملف الشخصي</span>
+                      <FaIdCard /> <span>{dictionary.profile[lang]}</span>
                     </li>
                   </Link>
                   <li className="amount-container">
                     <span>
                       <FaDollarSign />
-                      <span>الرصيد</span>
+                      <span>{dictionary.credit[lang]}</span>
                     </span>
-                    <span className="amount">{user.amount}</span>
+                    <span className="amount">
+                      {user.amount}
+                      <span className="amountCurrency">
+                        {dictionary.LBP[lang]}
+                      </span>
+                    </span>
                     <button
                       className="chargebtn"
-                      onClick={() => alert("هذه الخدمة ليست متوفرة حالياً")}
+                      onClick={() => alert(dictionary.alert[lang])}
                     >
-                      شحن
+                      {dictionary.charge[lang]}
                     </button>
                   </li>
                   <Link href="/details/offers">
                     <li>
-                      <FaPercentage /> <span>حسومات وقسائم شرائية</span>
+                      <FaPercentage /> <span>{dictionary.discounts[lang]}</span>
                     </li>
                   </Link>
 
                   <Link href="/details/orders">
                     <li onClick={() => setDots(true)}>
-                      <FaTruckLoading /> <span>الطلبيات </span>
+                      <FaTruckLoading /> <span>{dictionary.orders[lang]}</span>
                     </li>
                   </Link>
                 </>
@@ -113,19 +143,32 @@ export default function Menu() {
           )}
           <Link href="/details/customers">
             <li onClick={() => setLoading(true)}>
-              <FaMugHot /> <span>حقوق الزبون</span>
+              <FaMugHot /> <span>{dictionary.rights[lang]}</span>
             </li>
           </Link>
-
           <Link href="/details/conditions">
             <li onClick={() => setLoading(true)}>
-              <FaFileContract /> <span>شروط الاستخدام</span>
+              <FaFileContract /> <span>{dictionary.conditions[lang]}</span>
             </li>
           </Link>
+          <li>
+            <div className="langContainer">
+              <div>
+                <FaLanguage /> <span>{dictionary.language[lang]}</span>
+              </div>
+              <div>
+                <select onChange={(e) => setLang(e.target.value)}>
+                  {lang === "ar" && <option value="ar">العربية</option>}
+                  <option value="en">English</option>
+                  {lang === "en" && <option value="ar">العربية</option>}
+                </select>
+              </div>
+            </div>
+          </li>
 
           <Link href="https://wa.me/+96170097533?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C+%D8%A8%D8%AF%D9%8A+%D8%AA%D8%B3%D8%A7%D8%B9%D8%AF%D9%86%D9%8A+%D8%A8%D9%80">
             <li>
-              <FaWhatsapp /> <span>اتصل بنا</span>
+              <FaWhatsapp /> <span>{dictionary.contact[lang]}</span>
             </li>
           </Link>
         </ul>
@@ -181,9 +224,8 @@ export default function Menu() {
           align-items: center;
         }
 
-        .amount:after {
+        .amountCurrency {
           margin: auto 0.5rem;
-          content: "ل.ل";
         }
 
         .chargebtn {
@@ -192,6 +234,21 @@ export default function Menu() {
           padding: 0.2rem 0.8rem;
           border-radius: 0.2rem;
         }
+        .langContainer {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+        }
+        select {
+          background: white;
+        }
+
         .dots {
           height: 7rem;
           padding: 1rem;

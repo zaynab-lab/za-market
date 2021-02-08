@@ -1,15 +1,25 @@
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
 
 export default function ContactUs() {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    problem: {
+      en: "In case you faced a problem",
+      ar: "في حال مواجهة أي مشكلة"
+    },
+    contact: { en: "Contact us", ar: "تواصل معنا" }
+  };
   return (
     <>
       <div className="contactUs">
-        <div>في حال مواجهة أي مشكلة</div>
+        <div>{dictionary.problem[lang]}</div>
         <Link href="https://wa.me/+96170097533?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C">
           <div className="contactbtn">
-            <FaWhatsapp /> <span>تواصل معنا</span>
+            <FaWhatsapp /> <span>{dictionary.contact[lang]}</span>
           </div>
         </Link>
       </div>

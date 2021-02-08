@@ -1,12 +1,17 @@
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
 
 import Cloud from "./Loaders/Cloud";
 
 export default function Loader() {
+  const lang = useRecoilValue(langState);
   return (
     <>
       <div className="loading">
-        <div className="loading-title">جاري تحميل البيانات</div>
+        <div className="loading-title">
+          {lang === "en" ? "Loading Data" : "جاري تحميل البيانات"}
+        </div>
         <div className="svg">
           <Cloud />
         </div>

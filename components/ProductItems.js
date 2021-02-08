@@ -2,150 +2,169 @@ import Controll from "./Controll";
 import { styles } from "../public/js/styles";
 import ImageLoader, { PriceLoader } from "./ProductContentLoader";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 
-const ProductCard = ({ product }) => (
-  <>
-    {product.appear && (
-      <div className="card">
-        {product.category ? (
-          product.img ? (
-            <img
-              className="card-img"
-              src={`https://storage.googleapis.com/za-market/Products/${product.category}/${product._id}.png`}
-              alt={product.name}
-            />
+const ProductCard = ({ product }) => {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    LBP: { en: "LBP", ar: "ل.ل" },
+    out: { en: "Out of Stock", ar: "نفذ المنتج" }
+  };
+  return (
+    <>
+      {product.appear && (
+        <div className="card">
+          {product.category ? (
+            product.img ? (
+              <img
+                className="card-img"
+                src={`https://storage.googleapis.com/za-market/Products/${product.category}/${product._id}.png`}
+                alt={product.name}
+              />
+            ) : (
+              <img
+                className="card-img"
+                src={product.link ? product.link : "/img/png/noImg.png"}
+                alt=""
+              />
+            )
           ) : (
-            <img
-              className="card-img"
-              src={product.link ? product.link : "/img/png/noImg.png"}
-              alt=""
-            />
-          )
-        ) : (
-          <ImageLoader />
-        )}
-        <div className="card-content">
-          {product.name ? (
-            <>
-              <div className="card-name">
-                {product.name}
-                {!product.link && (
-                  <span className="card-description">
-                    {product.description}
-                  </span>
+            <ImageLoader />
+          )}
+          <div className="card-content">
+            {product.name ? (
+              <>
+                <div className="card-name">
+                  {product.name}
+                  {!product.link && (
+                    <span className="card-description">
+                      {product.description}
+                    </span>
+                  )}
+                </div>
+                <div className="card-description">{product.brand}</div>
+              </>
+            ) : (
+              <PriceLoader />
+            )}
+            <div className="card-price">
+              {product.initprice ? (
+                <div className="initprice">
+                  {product.initprice}
+                  <span className="currency">{dictionary.LBP[lang]}</span>
+                </div>
+              ) : (
+                <></>
+              )}
+              <div className="price">
+                {product.price ? (
+                  <>
+                    {product.price}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
+                  </>
+                ) : (
+                  <PriceLoader />
                 )}
               </div>
-              <div className="card-description">{product.brand}</div>
-            </>
-          ) : (
-            <PriceLoader />
-          )}
-          <div className="card-price">
-            <div className="initprice">{product.initprice}</div>
-            <div className="price">
-              {product.price ? <>{product.price}</> : <PriceLoader />}
             </div>
           </div>
+          {product.exist ? (
+            <Controll id={product._id} measure={product.measure} />
+          ) : (
+            <div className="exist">
+              {product.name ? <>{dictionary.out[lang]}</> : <PriceLoader />}
+            </div>
+          )}
         </div>
-        {product.exist ? (
-          <Controll id={product._id} measure={product.measure} />
-        ) : (
-          <div className="exist">
-            {product.name ? <>نفذ المنتج</> : <PriceLoader />}
-          </div>
-        )}
-      </div>
-    )}
-    <style jsx>
-      {`
-        .card {
-          display: -webkit-box;
-          display: -ms-flexbox;
-          display: flex;
-          -webkit-box-orient: vertical;
-          -webkit-box-direction: normal;
-          -ms-flex-direction: column;
-          flex-direction: column;
-          -webkit-box-pack: center;
-          -ms-flex-pack: center;
-          justify-content: center;
-          height: -webkit-fit-content;
-          height: -moz-fit-content;
-          height: fit-content;
-          -webkit-box-align: center;
-          -ms-flex-align: center;
-          align-items: center;
-          border: 1px solid ${styles.primaryColor};
-          border-radius: 0.5rem;
-          -webkit-box-flex: 1;
-          -ms-flex: 1 1 10rem;
-          flex: 1 1 10rem;
-          margin: 0.3rem;
-          font-size: 1.2rem;
-          text-align: center;
-          box-shadow: 0px 0px 1px 2px ${styles.thirdColor};
-        }
+      )}
+      <style jsx>
+        {`
+          .card {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            height: -webkit-fit-content;
+            height: -moz-fit-content;
+            height: fit-content;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            border: 1px solid ${styles.primaryColor};
+            border-radius: 0.5rem;
+            -webkit-box-flex: 1;
+            -ms-flex: 1 1 10rem;
+            flex: 1 1 10rem;
+            margin: 0.3rem;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: 0px 0px 1px 2px ${styles.thirdColor};
+          }
 
-        .card-img {
-          width: 10rem;
-          height: 10rem;
-        }
+          .card-img {
+            width: 10rem;
+            height: 10rem;
+          }
 
-        .card-content {
-          width: 100%;
-        }
+          .card-content {
+            width: 100%;
+          }
 
-        .card-price {
-          background-color: ${styles.thirdColor};
-          width: 100%;
-          padding: 0.1rem;
-          border: solid ${styles.primaryColor};
-          border-width: 1px 0;
-          margin: 0;
-          height: 3.6rem;
-          display: -webkit-box;
-          display: -ms-flexbox;
-          display: flex;
-          -webkit-box-orient: vertical;
-          -webkit-box-direction: normal;
-          -ms-flex-direction: column;
-          flex-direction: column;
-          -webkit-box-pack: center;
-          -ms-flex-pack: center;
-          justify-content: center;
-        }
+          .card-price {
+            background-color: ${styles.thirdColor};
+            width: 100%;
+            padding: 0.1rem;
+            border: solid ${styles.primaryColor};
+            border-width: 1px 0;
+            margin: 0;
+            height: 3.6rem;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+          }
 
-        .price:after {
-          font-size: 1rem;
-          content: " ل.ل";
-        }
+          .currency {
+            font-size: 1rem;
+            padding: 0.2rem;
+          }
 
-        .card-name {
-          margin: 0.3rem;
-        }
-        .card-description {
-          margin: 0 0.3rem;
-          font-size: 0.8rem;
-        }
+          .card-name {
+            margin: 0.3rem;
+          }
+          .card-description {
+            margin: 0 0.3rem;
+            font-size: 0.8rem;
+          }
 
-        .initprice {
-          font-size: 0.8rem;
-          color: ${styles.secondaryColor};
-          text-decoration: line-through;
-        }
+          .initprice {
+            font-size: 0.8rem;
+            color: ${styles.secondaryColor};
+            text-decoration: line-through;
+          }
 
-        .initprice:after {
-          font-size: 1rem;
-          ${product.initprice && "content:' ل.ل'"};
-        }
-        .exist {
-          line-height: 3.6rem;
-          color: ${styles.primaryColor};
-        }
-      `}
-    </style>
-  </>
-);
+          .exist {
+            line-height: 3.6rem;
+            color: ${styles.primaryColor};
+          }
+        `}
+      </style>
+    </>
+  );
+};
 
 export default function ProductsList({ pageProducts }) {
   const skelaton = new Array(20).fill({ appear: true });

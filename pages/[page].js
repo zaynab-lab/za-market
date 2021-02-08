@@ -5,6 +5,7 @@ import ProductItems from "../components/ProductItems";
 import { useRecoilValue } from "recoil";
 import { categoriesState } from "./index";
 import axios from "axios";
+import { langState } from "./menu";
 
 export default function Page() {
   const [pageProducts, setPageProducts] = useState([]);
@@ -13,6 +14,7 @@ export default function Page() {
   const [categoryList, setCategoryList] = useState(categoryListInfo);
   const router = useRouter();
   const { page } = router.query;
+  const lang = useRecoilValue(langState);
 
   useEffect(() => {
     axios.get("/api/categories").then((res) => {
@@ -22,8 +24,8 @@ export default function Page() {
   }, [setCategoryList, page]);
   useEffect(() => {
     const p = categoryList.find((obj) => obj.name === page);
-    setTitle(p && p.title);
-  }, [setTitle, page, categoryList]);
+    p && setTitle(lang === "en" ? p.name : p.title);
+  }, [lang, setTitle, page, categoryList]);
   useEffect(() => {
     axios.get(`/api/products/${page}`).then((res) => {
       const { data } = res;

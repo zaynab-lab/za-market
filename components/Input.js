@@ -1,3 +1,5 @@
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
 
 export default function Input({
@@ -8,12 +10,14 @@ export default function Input({
   disabled,
   handleChange
 }) {
+  const lang = useRecoilValue(langState);
+
   return (
     <>
       <div className="inputContainer">
         <input
           className="input"
-          placeholder={placeholder}
+          placeholder={lang === "en" ? name : placeholder}
           value={value}
           type={type}
           name={name}
@@ -26,7 +30,7 @@ export default function Input({
 
         {value && (
           <label className="label" for={placeholder}>
-            {placeholder}
+            {lang === "en" ? name : placeholder}
           </label>
         )}
       </div>
@@ -73,7 +77,7 @@ export default function Input({
           font-size: 0.8rem;
           position: absolute;
           bottom: 0.6rem;
-          right: 0.8rem;
+          ${lang === "en" ? "left:0.8rem" : "right: 0.8rem"};
           padding: 0;
           pointer-events: none;
           color: grey;

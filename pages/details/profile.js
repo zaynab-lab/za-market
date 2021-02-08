@@ -8,7 +8,7 @@ import { styles } from "../../public/js/styles";
 import Input from "../../components/Input";
 import { FaIdCard, FaMapMarkedAlt, FaTasks } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
-import { userState } from "../menu";
+import { langState, userState } from "../menu";
 import AddAddress from "../../components/AddAdress";
 
 const userInputList = [
@@ -31,6 +31,17 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [hasAddress, setHasAddress] = useState(false);
+  const lang = useRecoilValue(langState);
+
+  const dictionary = {
+    profile: { en: "Profile", ar: "الملف الشخصي" },
+    identity: { en: "Identity", ar: "الهوية" },
+    addresses: { en: "Addresses", ar: "العناوين" },
+    logout: { en: "Log out", ar: "تسجيل الخروج" },
+    birth: { en: "Birth date", ar: "تاريخ الميلاد" },
+    management: { en: "management", ar: "الصفحة الإدارية" },
+    deleteAdd: { en: "Delete the address", ar: "حذف العنوان" }
+  };
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -56,7 +67,7 @@ export default function Profile() {
 
   return (
     <>
-      <TopBar title="الملف الشخصي" page={true} />
+      <TopBar title={dictionary.profile[lang]} page={true} />
       {loading && <Loader />}
       {!loading && (
         <>
@@ -68,7 +79,7 @@ export default function Profile() {
                     <span className="icon">
                       <FaTasks />
                     </span>
-                    <span>الصفحة الإدارية</span>
+                    <span>{dictionary.management[lang]}</span>
                   </div>
                 </Link>
               )}
@@ -77,7 +88,7 @@ export default function Profile() {
                 <span className="icon">
                   <FaIdCard />
                 </span>
-                <span>الهوية</span>
+                <span>{dictionary.identity[lang]}</span>
               </div>
 
               <div className="inputContainer">
@@ -93,7 +104,7 @@ export default function Profile() {
                   />
                 ))}
               </div>
-              <div>تاريخ الميلاد</div>
+              <div>{dictionary.birth[lang]}</div>
 
               <input
                 className="birth"
@@ -112,7 +123,7 @@ export default function Profile() {
                   {" "}
                   <FaMapMarkedAlt />
                 </span>
-                <span>العناوين</span>
+                <span>{dictionary.addresses[lang]}</span>
               </div>
 
               <AddAddress
@@ -126,7 +137,7 @@ export default function Profile() {
                     alert("this should delete");
                   }}
                 >
-                  <span>حذف العنوان</span>
+                  <span>{dictionary.deleteAdd[lang]}</span>
                 </div>
               )}
             </div>
@@ -150,7 +161,7 @@ export default function Profile() {
                     .then(() => Router.push("/"));
                 }}
               >
-                تسجيل الخروج
+                {dictionary.logout[lang]}
               </div>
             )}
           </div>

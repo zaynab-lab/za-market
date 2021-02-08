@@ -5,6 +5,7 @@ import { phoneState } from "./PhoneOTP";
 import { styles } from "../public/js/styles";
 import Router from "next/router";
 import Dots from "./Loaders/Dots";
+import { langState } from "../pages/menu";
 
 export const userNameState = atom({
   key: "userName",
@@ -12,6 +13,29 @@ export const userNameState = atom({
 });
 
 export default function Name({ routeTo }) {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    membership: {
+      en: "Your membership is completed successfully",
+      ar: "تمت عضويتك بشكل كامل، يمكنك اكمال المعلومات في الملف الشخصي"
+    },
+    fullName: {
+      en: "Full Name",
+      ar: "الإسم الكامل"
+    },
+    accept: {
+      en: "Continue",
+      ar: "تأكيد"
+    },
+    buy: {
+      en: "You can complete the purchase",
+      ar: "يمكنك اتمام عملية الشراء"
+    },
+    wlc: {
+      en: "Welcome to us, you are now a member of the application",
+      ar: "مرحبا بك معنا، انت الآن عضو في التطبيق"
+    }
+  };
   const setUserName = useSetRecoilState(userNameState);
   const phoneNumber = useRecoilValue(phoneState);
   const [message, setMessage] = useState("");
@@ -30,16 +54,10 @@ export default function Name({ routeTo }) {
       .then((res) => {
         const { status } = res;
         if (status === 200) {
-          setMessage(
-            "تمت عضويتك بشكل كامل، يمكنك اكمال المعلومات في الملف الشخصي"
-          );
+          setMessage(dictionary.membership[lang]);
           routeTo
-            ? Router.push(
-                "/cart?msg=%D9%8A%D9%85%D9%83%D9%86%D9%83%20%D8%A7%D8%AA%D9%85%D8%A7%D9%85%20%D8%B9%D9%85%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B4%D8%B1%D8%A7%D8%A1"
-              )
-            : Router.push(
-                "/?msg=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A8%D9%83%20%D9%85%D8%B9%D9%86%D8%A7%D8%8C%20%D8%A7%D9%86%D8%AA%20%D8%A7%D9%84%D8%A2%D9%86%20%D8%B9%D8%B6%D9%88%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%AA%D8%B7%D8%A8%D9%8A%D9%82"
-              );
+            ? Router.push("/cart?msg=" + dictionary.buy[lang])
+            : Router.push("/?msg=" + dictionary.wlc[lang]);
           setUserName(name);
         }
       });
@@ -49,7 +67,7 @@ export default function Name({ routeTo }) {
     <>
       <div className="message">{message}</div>
       <input
-        placeholder="الإسم الكامل"
+        placeholder={dictionary.fullName[lang]}
         className="name"
         onChange={(e) => setName(e.target.value)}
         value={name}
@@ -58,7 +76,7 @@ export default function Name({ routeTo }) {
       />
 
       <button className="btn" onClick={() => handleClick()}>
-        {dots ? <Dots /> : "تأكيد"}
+        {dots ? <Dots /> : dictionary.accept[lang]}
       </button>
 
       <style jsx>{`

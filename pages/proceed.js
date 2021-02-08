@@ -11,6 +11,7 @@ import OrderEnd from "../components/OrderEnd";
 import AddAddress from "../components/AddAdress";
 import SnakBar from "../components/SnakBar";
 import Switch, { toggleState } from "../components/Switch";
+import { langState } from "./menu";
 
 export default function Proceed() {
   const cartList = useRecoilValue(cartListState);
@@ -30,6 +31,31 @@ export default function Proceed() {
   const fire = (message) => {
     setSnak({ message, show: true });
     setTimeout(() => setSnak(""), 4000);
+  };
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    proceed: { en: "Proceed", ar: "المرحلة النهائية" },
+    invoice: { en: "Invoice", ar: "فاتورة الطلبية" },
+    total: { en: "Total", ar: "إجمالي الطلب بـ" },
+    delivery: { en: "Delivery", ar: "أجرة التوصيل" },
+    discount: { en: "Discount", ar: "خصم" },
+    final: { en: "Final Total", ar: "الإجمالي النهائي" },
+    LBP: { en: "LBP", ar: "ل.ل" },
+    payment: { en: "Payment Method", ar: "طريقة الدفع" },
+    receipt: { en: "Upon receipt", ar: "عند الإستلام" },
+    creditCard: { en: "Credit Card", ar: "بطاقة الإئتمان" },
+    online: { en: "Online", ar: "عبر الإنترنت" },
+    credit: { en: "Pay from credit", ar: "الدفع من الرصيد" },
+    required: { en: "Required", ar: "المطلوب" },
+    order: { en: "Order", ar: "الموافقة النهائية" },
+    addAddress: {
+      en: "Add address to continue",
+      ar: "اضف عنوان للتمكن من الإرسال"
+    },
+    chooseAddress: {
+      en: "Choose an address from your list",
+      ar: "اختر العنوان المطلوب الإرسال إليه"
+    }
   };
 
   useEffect(() => {
@@ -91,28 +117,38 @@ export default function Proceed() {
         <Loader />
       ) : (
         <>
-          <TopBar title="المرحلة النهائية" page={true} cart={false} />
+          <TopBar title={dictionary.proceed[lang]} page={true} cart={false} />
           <div className="container">
-            <div className="bill">
-              <div>فاتورة الطلبية</div>
+            <div className="invoice">
+              <div className="invoice-title">{dictionary.invoice[lang]}</div>
               <OrderEnd proceedProducts={proceedProducts} />
-              <div className="bill-content">
+              <div className="invoice-content">
                 <div>
-                  <span>اجمالي الطلب بـ</span>{" "}
-                  <span className="price">{total} </span>
+                  <span>{dictionary.total[lang]}</span>{" "}
+                  <span className="price">
+                    {total}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
+                  </span>
                 </div>
                 <div>
-                  <span>اجرة التوصيل</span>{" "}
-                  <span className="price">{delivery} </span>{" "}
+                  <span>{dictionary.delivery[lang]}</span>{" "}
+                  <span className="price">
+                    {delivery}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
+                  </span>
                 </div>
                 {discount && (
                   <div>
-                    <span>الخصم</span> <span className="price">- </span>{" "}
+                    <span>{dictionary.discount[lang]}</span>{" "}
+                    <span className="price">- </span>{" "}
                   </div>
                 )}
-                <div className="bill-total">
-                  <span>الإجمالي النهائي</span>{" "}
-                  <span className="price">{total + delivery} </span>{" "}
+                <div className="invoice-total">
+                  <span>{dictionary.final[lang]}</span>
+                  <span className="price">
+                    {total + delivery}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -126,42 +162,42 @@ export default function Proceed() {
             {/* ///////////////////////////////// */}
             <div className="pay">
               <div>
-                <span className="label">طريقة الدفع: </span>
+                <span className="label">{dictionary.payment[lang]}: </span>
                 <select
                   className="select"
                   onChange={(e) => setPayment(e.target.value)}
                 >
-                  <option value="عند الإستلام">عند الإستلام</option>
-                  <option disabled value="بطاقة الائتمان">
-                    بطاقة الائتمان
+                  <option value={dictionary.receipt[lang]}>
+                    {dictionary.receipt[lang]}
                   </option>
-                  <option
-                    onClick={() => alert("الخدمة غير متوفرة حاليا")}
-                    disabled
-                    value="عبر الإنترنت"
-                  >
-                    عبر الإنترنت
+                  <option disabled value={dictionary.creditCard[lang]}>
+                    {dictionary.creditCard[lang]}
+                  </option>
+                  <option disabled value={dictionary.online[lang]}>
+                    {dictionary.online[lang]}
                   </option>
                 </select>
               </div>
               <div>
                 <span className="label">
-                  الدفع من الرصيد:{" "}
+                  {dictionary.credit[lang]}:{" "}
                   <span className="amount">
                     {user.amount - (toggle && total + delivery) > 0
                       ? user.amount - (toggle && total + delivery)
                       : 0}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
                   </span>
                 </span>
                 <Switch />
               </div>
               <div>
                 <span className="label">
-                  المطلوب:{" "}
+                  {dictionary.required[lang]}:
                   <span className="amount">
                     {total + delivery - (toggle && user.amount) > 0
                       ? total + delivery - (toggle && user.amount)
                       : 0}
+                    <span className="currency">{dictionary.LBP[lang]}</span>
                   </span>
                 </span>
               </div>
@@ -175,8 +211,8 @@ export default function Proceed() {
                   onClick={() => {
                     if (selectedAddress === "") {
                       !hasAddress
-                        ? fire("اضف عنوان للتمكن من الإرسال")
-                        : fire("اختر العنوان المطلوب الإرسال إليه");
+                        ? fire(dictionary.addAddress[lang])
+                        : fire(dictionary.chooseAddress[lang]);
                     } else {
                       setDots(true);
                       axios
@@ -207,7 +243,7 @@ export default function Proceed() {
                     }
                   }}
                 >
-                  الموافقة النهائية
+                  {dictionary.order[lang]}
                 </div>
               )}
             </div>
@@ -245,14 +281,17 @@ export default function Proceed() {
         .select:focus {
           border: 1px solid ${styles.primaryColor};
         }
-        .bill {
+        .invoice {
           padding: 0.8rem;
         }
-        .bill-content {
+        .invoice-title {
+          color: ${styles.primaryColor};
+        }
+        .invoice-content {
           padding: 0.5rem;
           font-size: 1rem;
         }
-        .bill-content div {
+        .invoice-content div {
           display: -webkit-box;
           display: -ms-flexbox;
           display: flex;
@@ -260,9 +299,10 @@ export default function Proceed() {
           -ms-flex-pack: justify;
           justify-content: space-between;
         }
-        .bill-total {
+        .invoice-total {
           font-size: 1.2rem;
           border-top: 1px solid ${styles.primaryColor};
+          margin-top: 0.2rem;
         }
 
         .confirmbtn {
@@ -277,8 +317,8 @@ export default function Proceed() {
           line-height: 1.8rem;
           text-align: center;
         }
-        .price::after {
-          content: " ل.ل";
+        .currency {
+          padding: 0.2rem;
         }
 
         .dots {
@@ -308,10 +348,6 @@ export default function Proceed() {
           margin: auto 0.5rem;
           font-size: 0.9rem;
           color: black;
-        }
-        .amount:after {
-          margin: auto 0.5rem;
-          content: "ل.ل";
         }
       `}</style>
     </>

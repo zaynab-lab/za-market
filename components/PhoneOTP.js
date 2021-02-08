@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { atom, useSetRecoilState } from "recoil";
+import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import { PhonePageState } from "../pages/Login";
 import { styles } from "../public/js/styles";
@@ -7,6 +7,7 @@ import Router from "next/router";
 import ContactUs from "./ContactUs";
 import timer from "../util/timer";
 import Dots from "./Loaders/Dots";
+import { langState } from "../pages/menu";
 
 export const phoneState = atom({
   key: "phone",
@@ -14,6 +15,45 @@ export const phoneState = atom({
 });
 
 export default function PhoneOTP({ routeTo }) {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    zero: { en: "Start number whithout zero", ar: "ابدء الرقم بدون صفر" },
+    check: { en: "Please check the number", ar: "الرجاء التأكد من الرقم" },
+    buy: {
+      en: "You can complete the purchase",
+      ar: "بإمكانك إتمام عملية الشراء"
+    },
+    loginDone: { en: "Log in successed", ar: "تم تسجيل الدخول بنجاح" },
+    insertphone: { en: "Insert phone number", ar: "أدخل رقمك الخليوي" },
+    otp: {
+      en: "Insert the one time password",
+      ar: "أدخل الرمز المؤقت، يرجى الانتظار"
+    },
+    password: {
+      en: "Insert your password",
+      ar: "أدخل الرمز الخاص بك"
+    },
+    login: {
+      en: "Log in",
+      ar: "تسجيل الدخول"
+    },
+    requestOtp: {
+      en: "Request OTP",
+      ar: "طلب الرمز المؤقت"
+    },
+    have: {
+      en: "I have a password",
+      ar: "لدي الرمز الخاص بي"
+    },
+    dntHave: {
+      en: "I dont have a password",
+      ar: "ليس لدي الرمز الخاص بي"
+    },
+    requestAgain: {
+      en: "Request OTP again",
+      ar: "طلب الرمز مجدداً"
+    }
+  };
   const [waiting, setWaiting] = useState(false);
   const [hasPass, setHasPass] = useState(false);
   const setphone = useSetRecoilState(phoneState);
@@ -29,7 +69,7 @@ export default function PhoneOTP({ routeTo }) {
     setMessage(" ");
     if (phoneNumber === "") {
       e.target.value !== "0" && setPhoneNumber(e.target.value);
-      e.target.value === "0" && setMessage("ابدء الرقم بدون صفر");
+      e.target.value === "0" && setMessage(dictionary.zero[lang]);
     } else {
       setPhoneNumber(e.target.value);
     }
@@ -38,7 +78,7 @@ export default function PhoneOTP({ routeTo }) {
   const checkNumber = (action) => {
     setMessage(" ");
     if (!(phoneNumber.length === 7 || phoneNumber.length === 8)) {
-      setMessage("الرجاء التأكد من الرقم");
+      setMessage(dictionary.check[lang]);
       return;
     }
     action();
@@ -84,12 +124,10 @@ export default function PhoneOTP({ routeTo }) {
         res.data === "done" && setPhonePage(false);
         res.data === "exist" &&
           (routeTo
-            ? Router.push(
-                "/cart?msg=%D9%8A%D9%85%D9%83%D9%86%D9%83%20%D8%A7%D8%AA%D9%85%D8%A7%D9%85%20%D8%B9%D9%85%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B4%D8%B1%D8%A7%D8%A1"
-              ) && setMessage("بإمكانك إتمام عملية الشراء")
-            : Router.push(
-                "/?msg=%D8%AA%D9%85%20%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%AF%D8%AE%D9%88%D9%84%D9%83%20%D8%A8%D9%86%D8%AC%D8%A7%D8%AD"
-              ) && setMessage("تم تسجيل الدخول بنجاح"));
+            ? Router.push("/cart?msg=" + dictionary.buy[lang]) &&
+              setMessage(dictionary.buy[lang])
+            : Router.push("/?msg=" + dictionary.loginDone[lang]) &&
+              setMessage(dictionary.loginDone[lang]));
         res.data !== "done" && res.data !== "exist" && setMessage(res.data);
       });
   };
@@ -108,7 +146,7 @@ export default function PhoneOTP({ routeTo }) {
               <option>1+</option>
             </select>
             <input
-              placeholder="أدخل رقمك الخليوي"
+              placeholder={dictionary.insertphone[lang]}
               className="phone"
               onChange={(e) => handleChange(e)}
               value={phoneNumber}
@@ -121,7 +159,7 @@ export default function PhoneOTP({ routeTo }) {
           <>
             {waiting && (
               <input
-                placeholder="أدخل الرمز المؤقت، يرجى الانتظار"
+                placeholder={dictionary.otp[lang]}
                 className="phone otp"
                 value={oTP}
                 onChange={(e) => {
@@ -135,7 +173,7 @@ export default function PhoneOTP({ routeTo }) {
           <>
             {hasPass && (
               <input
-                placeholder="أدخل الرمز الخاص بك"
+                placeholder={dictionary.password[lang]}
                 className="phone otp"
                 value={passWord}
                 type="password"
@@ -146,11 +184,11 @@ export default function PhoneOTP({ routeTo }) {
           <div className="btnContainer">
             {waiting ? (
               <button className="btn" onClick={() => login()}>
-                {dots ? <Dots /> : "تسجيل الدخول"}
+                {dots ? <Dots /> : dictionary.login[lang]}
               </button>
             ) : (
               <button className="btn" onClick={() => requestOTP()}>
-                {dots ? <Dots /> : "طلب الرمز المؤقت"}
+                {dots ? <Dots /> : dictionary.requestOtp}
               </button>
             )}
             <button
@@ -159,12 +197,12 @@ export default function PhoneOTP({ routeTo }) {
                 setHasPass(!hasPass);
               }}
             >
-              {hasPass ? "ليس لدي الرمز الخاص بي" : "لدي الرمز الخاص بي"}
+              {hasPass ? dictionary.dntHave : dictionary.have[lang]}
             </button>
           </div>
           {waiting && time === "00:00" && (
             <button className="btnRequest" onClick={() => requestOTP()}>
-              طلب الرمز مجدداً
+              {dictionary.requestAgain[lang]}
             </button>
           )}
         </div>

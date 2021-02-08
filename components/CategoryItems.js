@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
-import Loader from "./Loader";
 import ContentLoad from "./CategoryContentLoader";
 
 const Cover = ({ name }) => (
@@ -64,13 +65,19 @@ const CataItem = ({ title, name }) => {
 };
 export default function CategoryItems({ categories }) {
   const skelaton = new Array(20).fill(0);
+  const lang = useRecoilValue(langState);
+
   return (
     <>
       <div className="container">
         {categories.length === 0 &&
           skelaton.map((obj, index) => <CataItem key={index} />)}
         {categories.map((obj, index) => (
-          <CataItem key={index} title={obj.title} name={obj.name} />
+          <CataItem
+            key={index}
+            title={lang === "en" ? obj.name : obj.title}
+            name={obj.name}
+          />
         ))}
       </div>
       <style jsx>{`

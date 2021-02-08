@@ -1,12 +1,13 @@
 import CategoryItems from "../components/CategoryItems";
 import TopBar from "../components/TopBar";
-import { atom, useRecoilState } from "recoil";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadData from "../components/LoadData";
-import SlideShow from "../components/SlideShow";
+import SlideShow, { ArSlideShow } from "../components/SlideShow";
 import { useRouter } from "next/router";
 import SnakBar from "../components/SnakBar";
+import { langState } from "./menu";
 
 export const productsState = atom({
   key: "productList",
@@ -22,6 +23,8 @@ export default function IndexPage() {
     categoriesState
   );
   const [categoryList, setCategoryList] = useState(categoryListInfo);
+  const lang = useRecoilValue(langState);
+  const dictionary = { category: { en: "Za-Market", ar: "الفئات" } };
   useEffect(() => {
     axios.get("/api/categories").then((res) => {
       const { data } = res;
@@ -46,14 +49,18 @@ export default function IndexPage() {
 
   return (
     <>
-      <TopBar title="الفئات" cart={true} main={true} />
+      <TopBar title={dictionary.category[lang]} cart={true} main={true} />
       <div className="container">
         {/* <OrderBar /> */}
-        <SlideShow />
+        {lang === "en" ? <SlideShow /> : <ArSlideShow />}
         <div className="imgContainer">
-          <div className="img">
-            <img width="200rem" src="/img/png/Flame.png" alt="" />
-          </div>
+          {lang === "ar" ? (
+            <div className="img">
+              <img width="200rem" src="/img/png/Flame.png" alt="" />
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="img">
             <img width="100rem" src="/img/png/Logo.png" alt="" />
           </div>

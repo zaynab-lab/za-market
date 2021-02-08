@@ -9,6 +9,7 @@ import axios from "axios";
 import Dots from "../components/Loaders/Dots";
 import SnakBar from "../components/SnakBar";
 import { useRouter } from "next/router";
+import { langState } from "./menu";
 
 export const cartListState = atom({
   key: "cartList",
@@ -27,6 +28,13 @@ export default function CartPage() {
   const fire = (message) => {
     setSnak({ message, show: true });
     setTimeout(() => setSnak(""), 4000);
+  };
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    cart: { en: "Cart", ar: "عربة التسوق" },
+    total: { en: "Total", ar: "الإجمالي" },
+    proceed: { en: "Proceed", ar: "تأكيد الطلب" },
+    LBP: { en: "LBP", ar: "ل.ل" }
   };
 
   useEffect(() => {
@@ -71,7 +79,7 @@ export default function CartPage() {
 
   return (
     <>
-      <TopBar title="عربة التسوق" />
+      <TopBar title={dictionary.cart[lang]} />
       <div className="container">
         <div className="cartItems">
           {cartList.length !== 0 &&
@@ -90,9 +98,9 @@ export default function CartPage() {
 
         <div className="total">
           <div></div>
-
-          <div className="currency">
-            الإجمالي: <span>{total}</span>
+          <div className="totalAmount">
+            {dictionary.total[lang]}: <span>{total}</span>
+            <span className="currency">{dictionary.LBP[lang]}</span>
           </div>
         </div>
 
@@ -104,7 +112,7 @@ export default function CartPage() {
                 setDots(true);
               }}
             >
-              {dots ? <Dots /> : <span>تأكيد الطلب</span>}
+              {dots ? <Dots /> : <span>{dictionary.proceed[lang]}</span>}
             </div>
           </Link>
         )}
@@ -126,8 +134,8 @@ export default function CartPage() {
           font-size: 1.2rem;
         }
 
-        .currency:after {
-          content: " ل.ل";
+        .currency {
+          padding: 0.2rem;
         }
 
         .proceedbtn {

@@ -3,9 +3,16 @@ import { cartListState } from "../pages/cart";
 import { useRecoilValue } from "recoil";
 import { styles } from "../public/js/styles";
 import ImageLoader, { NameLoader, PriceLoader } from "./CartContentLoader";
+import { langState } from "../pages/menu";
 
 export default function CartCard({ product }) {
   const cartList = useRecoilValue(cartListState);
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    price: { en: "Price", ar: "السعر" },
+    total: { en: "Total", ar: "الإجمالي" },
+    LBP: { en: "LBP", ar: "ل.ل" }
+  };
   const a = cartList
     .filter((items) => items.id === product._id)
     .map((obj) => obj.quantity);
@@ -46,10 +53,14 @@ export default function CartCard({ product }) {
 
         <div className="cartCard-footer">
           <div className="cartCard-price">
-            السعر: {product.category ? product.price : <PriceLoader />}
+            {dictionary.price[lang]}:
+            {product.category ? product.price : <PriceLoader />}
+            <span className="currency">{dictionary.LBP[lang]}</span>
           </div>
           <div className="cartCard-total">
-            الإجمالي: {product.category ? product.price * a : <PriceLoader />}
+            {dictionary.total[lang]}:{" "}
+            {product.category ? product.price * a : <PriceLoader />}
+            <span className="currency">{dictionary.LBP[lang]}</span>
           </div>
         </div>
       </div>
@@ -96,9 +107,8 @@ export default function CartCard({ product }) {
           width: 100%;
           padding: 0.5rem 1rem;
         }
-        .cartCard-price:after {
-          padding-right: 0.3rem;
-          content: "ل.ل";
+        .currency {
+          padding: 0.2rem;
         }
         .cartCard-content {
           display: -webkit-box;
@@ -147,11 +157,6 @@ export default function CartCard({ product }) {
           flex: 1 1 70%;
           text-align: center;
           color: ${styles.primaryColor};
-        }
-
-        .cartCard-total:after {
-          padding-right: 0.3rem;
-          content: "ل.ل";
         }
       `}</style>
     </>
