@@ -12,6 +12,8 @@ import {
   FaTruck
 } from "react-icons/fa";
 import OrdersContentLoader from "../OrdersContentLoader";
+import { useRecoilValue } from "recoil";
+import { langState } from "../../pages/menu";
 
 export default function OrdersPage({ page }) {
   const [roles, setRoles] = useState("");
@@ -76,6 +78,16 @@ export default function OrdersPage({ page }) {
 }
 
 const OrderTopBar = ({ setCurrent, current }) => {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    orders: { en: "Orders", ar: "الطلبيات" },
+    preparation: { en: "Preparation", ar: "تحضير الطلبية" },
+    audit: { en: "Audit", ar: "تدقيق الطلبية" },
+    dispatch: { en: "Dispatched", ar: "تم إرسالها" },
+    delivered: { en: "Delivered", ar: "تم تسليمها" },
+    canceled: { en: "Canceled", ar: "ملغاة" },
+    returned: { en: "Returned", ar: "تم ارجاعها" }
+  };
   return (
     <>
       <div className="orderTopBar">
@@ -86,7 +98,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaCheckCircle />
           </span>
-          <span>الطلبيات</span>
+          <span>{dictionary.orders[lang]}</span>
         </div>
 
         <div
@@ -96,7 +108,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaShoppingBag />
           </span>
-          <span>تحضير الطلبية</span>
+          <span>{dictionary.preparation[lang]}</span>
         </div>
 
         <div
@@ -106,7 +118,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaSearchPlus />
           </span>
-          <span>تدقيق الطلبية</span>
+          <span>{dictionary.audit[lang]}</span>
         </div>
 
         <div
@@ -116,7 +128,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaTruck />
           </span>
-          <span>تم إرسالها</span>
+          <span>{dictionary.dispatch[lang]}</span>
         </div>
 
         <div
@@ -126,7 +138,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaSmileWink />
           </span>
-          <span>تم تسليمها</span>
+          <span>{dictionary.delivered[lang]}</span>
         </div>
 
         <div
@@ -136,7 +148,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaTimesCircle />
           </span>
-          <span>ملغاة</span>
+          <span>{dictionary.canceled[lang]}</span>
         </div>
         <div
           className={`step ${current === "return" && "current"}`}
@@ -145,7 +157,7 @@ const OrderTopBar = ({ setCurrent, current }) => {
           <span className="icon">
             <FaBackward />
           </span>
-          <span>تم ارجاعها</span>
+          <span>{dictionary.returned[lang]}</span>
         </div>
       </div>
 

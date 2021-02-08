@@ -3,11 +3,17 @@ import { styles } from "../public/js/styles";
 import Link from "next/link";
 import Cloud from "./Loaders/Cloud";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 
 export default function OrderBar() {
   const [user, setUser] = useState(false);
   const [inProgress, setInProgress] = useState(true);
-
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    waiting: { en: "Current Orders", ar: "طلبيات قيد الإنتظار" },
+    old: { en: "Old Orders", ar: "الطلبيات السابقة" }
+  };
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
       const { data } = res;
@@ -24,14 +30,14 @@ export default function OrderBar() {
           {inProgress ? (
             <Link href="/details/orders">
               <div className="currentOrders">
-                <div>طلبيات قيد الإنتظار</div>
+                <div>{dictionary.waiting[lang]}</div>
                 <div className="loader">
                   <Cloud />
                 </div>
               </div>
             </Link>
           ) : (
-            <div className="oldOrders">الطلبيات السابقة</div>
+            <div className="oldOrders">{dictionary.old[lang]}</div>
           )}
         </>
       )}

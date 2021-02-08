@@ -1,17 +1,23 @@
+import { useRecoilValue } from "recoil";
 import TopBar from "../../components/TopBar";
 import { styles } from "../../public/js/styles";
+import { langState } from "../menu";
 
 export default function Conditions() {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    conditions: { en: "Using Conditions", ar: "شروط الاستخدام" },
+    generalCon: { en: "General Conditions", ar: "الشروط العامة" }
+  };
   return (
     <>
-      <TopBar title="شروط الاستخدام" page={true} />
+      <TopBar title={dictionary.conditions[lang]} page={true} />
 
       <div className="container">
-        <div className="title">الشروط العامة</div>
+        <div className="title">{dictionary.generalCon[lang]}</div>
 
         <ul>
           <li></li>
-
           <li></li>
         </ul>
       </div>

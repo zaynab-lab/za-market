@@ -4,8 +4,16 @@ import { styles } from "../../public/js/styles";
 import Orders from "../../components/Orders";
 import axios from "axios";
 import ContactUs from "../../components/ContactUs";
+import { useRecoilValue } from "recoil";
+import { langState } from "../menu";
 
 export default function OrdersPage() {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    orders: { en: "Orders", ar: "الطلبيات" },
+    current: { en: "Current", ar: "الحالية" },
+    previos: { en: "Previos", ar: "السابقة" }
+  };
   const [current, setCurrent] = useState(true);
   const [orderList, setOrderList] = useState([]);
 
@@ -20,7 +28,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <TopBar title="الطلبيات" page={false} />
+      <TopBar title={dictionary.orders[lang]} page={false} />
       <div className="container">
         <div className="topBar">
           <div
@@ -29,7 +37,7 @@ export default function OrdersPage() {
               setCurrent(true);
             }}
           >
-            الحالية
+            {dictionary.current[lang]}
           </div>
           <div
             className={`topBar-item ${!current && "current"}`}
@@ -37,7 +45,7 @@ export default function OrdersPage() {
               setCurrent(false);
             }}
           >
-            السابقة
+            {dictionary.previos[lang]}
           </div>
         </div>
         <Orders current={current} orderList={orderList} />

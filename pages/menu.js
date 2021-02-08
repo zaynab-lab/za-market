@@ -42,7 +42,7 @@ export default function Menu() {
     profile: { en: "Profile", ar: "الملف الشخصي" },
     credit: { en: "Credit", ar: "الرصيد" },
     charge: { en: "Charge", ar: "شحن" },
-    discounts: { en: "Discounts & Copuns", ar: "حسومات وقسائم شرائية" },
+    discounts: { en: "Discounts & Coupons", ar: "حسومات وقسائم شرائية" },
     orders: { en: "Orders", ar: "الطلبيات" },
     rights: { en: "Customer's rights", ar: "حقوق الزبون" },
     conditions: { en: "Using Conditions", ar: "شروط الاستخدام" },

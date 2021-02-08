@@ -5,43 +5,59 @@ import ArrowBar from "./ArrowBar";
 import ContentLoad from "./OrdersContentLoader";
 import { useEffect, useState } from "react";
 import dateChanger from "../util/dateChanger";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 
 const OrderItem = ({ currentList, index }) => {
   const [hidden, setHidden] = useState(index === 0 ? false : true);
-
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    orderDate: { en: "Order Date", ar: "تاريخ الطلب" },
+    total: { en: "Total", ar: "الإجمالي" },
+    delivery: { en: "Delivery", ar: "توصيل" },
+    orderCode: { en: "Order Code", ar: "رقم الطلب" },
+    required: { en: "Required", ar: "المطلوب" },
+    steps: { en: "Steps", ar: "المراحل" },
+    LBP: { en: "LBP", ar: "ل.ل" }
+  };
   return (
     <>
       <div className="orderContainer">
         <div className="header" onClick={() => setHidden(!hidden)}>
           <div>
             <span className="label">
-              <FaCalendarAlt /> تاريخ الطلب:
+              <FaCalendarAlt /> {dictionary.orderDate[lang]}:
             </span>{" "}
             {dateChanger(currentList.date)}
           </div>
 
           <div className="totalbar">
             <span>
-              <span className="label">الإجمالي: </span>
-              {currentList.total} ل.ل
-            </span>{" "}
-            <span className="label">رقم الطلب: {currentList.orderCode}</span>
+              <span className="label">{dictionary.total[lang]}: </span>
+              {currentList.total}
+              <span className="currency">{dictionary.LBP[lang]}</span>
+            </span>
+            <span className="label">
+              {dictionary.orderCode[lang]}: {currentList.orderCode}
+            </span>
           </div>
           <div className="totalbar">
             <span>
-              <span className="label">توصيل: </span>
-              {currentList.delivery} ل.ل
-            </span>{" "}
+              <span className="label">{dictionary.delivery[lang]}: </span>
+              {currentList.delivery}
+              <span className="currency">{dictionary.LBP[lang]}</span>
+            </span>
             <span>
-              <span className="label">المطلوب: </span>
-              {currentList.shouldpay} ل.ل
-            </span>{" "}
+              <span className="label">{dictionary.required[lang]}: </span>
+              {currentList.shouldpay}
+              <span className="currency">{dictionary.LBP[lang]}</span>
+            </span>
           </div>
         </div>
 
         {!hidden && <OrderEnd proceedProducts={currentList.products} />}
         <div className="footer">
-          <span className="label">المراحل : </span>
+          <span className="label">{dictionary.steps[lang]} : </span>
           <div className="stepContainer">
             <ArrowBar progress={currentList.progress} />
           </div>
@@ -96,6 +112,9 @@ const OrderItem = ({ currentList, index }) => {
           -webkit-box-flex: 1;
           -ms-flex: 1 1 100%;
           flex: 1 1 100%;
+        }
+        .currency {
+          padding: 0.2rem;
         }
         .label {
           color: ${styles.secondaryColor};

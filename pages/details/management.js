@@ -8,8 +8,19 @@ import ProductsPage from "../../components/Management/ProductsPage";
 import CustomersPage from "../../components/Management/CustomersPage";
 import OrdersPage from "../../components/Management/OrdersPage";
 import CreditPage from "../../components/Management/CreditPage";
+import { useRecoilValue } from "recoil";
+import { langState } from "../menu";
 
 export default function Conditions() {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    managment: { en: "Management Page", ar: "الصفحة الإدارية" },
+    general: { en: "General", ar: "العامة" },
+    products: { en: "Products", ar: "المنتجات" },
+    users: { en: "Customers", ar: "الزبائن" },
+    orders: { en: "Orders", ar: "الطلبيات" },
+    account: { en: "Account", ar: "حسابك" }
+  };
   const [loadpage, setLoadpage] = useState(false);
   const [roles, setRoles] = useState([]);
   const [pages, setPages] = useState([]);
@@ -30,7 +41,7 @@ export default function Conditions() {
 
   return (
     <>
-      <TopBar title="الصفحة الإدارية" page={true} />
+      <TopBar title={dictionary.managment[lang]} page={true} />
       {!loadpage && <Loader />}
       {loadpage && (
         <div className="container">
@@ -40,7 +51,7 @@ export default function Conditions() {
                 className={`topBar-item ${current === "GM" && "current"}`}
                 onClick={() => setCurrent("GM")}
               >
-                العامة
+                {dictionary.general[lang]}
               </div>
             )}
             {pages.includes("products") && (
@@ -48,7 +59,7 @@ export default function Conditions() {
                 className={`topBar-item ${current === "products" && "current"}`}
                 onClick={() => setCurrent("products")}
               >
-                المنتجات
+                {dictionary.products[lang]}
               </div>
             )}
 
@@ -57,7 +68,7 @@ export default function Conditions() {
                 className={`topBar-item ${current === "users" && "current"}`}
                 onClick={() => setCurrent("users")}
               >
-                الزبائن
+                {dictionary.users[lang]}
               </div>
             )}
 
@@ -66,7 +77,7 @@ export default function Conditions() {
                 className={`topBar-item ${current === "orders" && "current"}`}
                 onClick={() => setCurrent("orders")}
               >
-                الطلبيات
+                {dictionary.orders[lang]}
               </div>
             )}
 
@@ -74,7 +85,7 @@ export default function Conditions() {
               className={`topBar-item ${current === "credit" && "current"}`}
               onClick={() => setCurrent("credit")}
             >
-              حسابك
+              {dictionary.account[lang]}
             </div>
           </div>
 
