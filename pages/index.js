@@ -64,6 +64,13 @@ export default function IndexPage() {
           <div className="img">
             <img width="100rem" src="/img/png/Logo.png" alt="" />
           </div>
+          {lang === "en" ? (
+            <div className="img">
+              <img width="200rem" src="/img/png/bestOffers.png" alt="" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <CategoryItems categories={categoryList} />
       </div>

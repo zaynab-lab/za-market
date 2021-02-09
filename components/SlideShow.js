@@ -8,7 +8,7 @@ export default function SlideShow() {
     method: { en: "The", ar: "الطريقة" },
     cheapest: { en: "cheapest", ar: "الأوفر" },
     easiest: { en: "easiest", ar: "الأسهل" },
-    funnest: { en: "funnest", ar: "الأمتع" },
+    funnest: { en: "funniest", ar: "الأمتع" },
     shop: { en: "way for shopping", ar: "للتسوق" }
   };
 
