@@ -16,7 +16,7 @@ export default function ContactUs() {
   return (
     <>
       <div className="contactUs">
-        <div>{dictionary.problem[lang]}</div>
+        <div className="problem">{dictionary.problem[lang]}</div>
         <Link href="https://wa.me/+96170097533?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C">
           <div className="contactbtn">
             <FaWhatsapp /> <span>{dictionary.contact[lang]}</span>
@@ -42,7 +42,9 @@ export default function ContactUs() {
           margin: 1rem 0;
           font-size: 0.9rem;
         }
-
+        .problem {
+          padding: 0.2rem;
+        }
         .contactbtn {
           background: ${styles.primaryColorLight};
           color: white;

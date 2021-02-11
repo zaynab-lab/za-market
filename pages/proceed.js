@@ -42,7 +42,7 @@ export default function Proceed() {
     final: { en: "Final Total", ar: "الإجمالي النهائي" },
     LBP: { en: "LBP", ar: "ل.ل" },
     payment: { en: "Payment Method", ar: "طريقة الدفع" },
-    receipt: { en: "Upon receipt", ar: "عند الإستلام" },
+    receipt: { en: "Cash on delivery", ar: "عند الإستلام" },
     creditCard: { en: "Credit Card", ar: "بطاقة الإئتمان" },
     online: { en: "Online", ar: "عبر الإنترنت" },
     credit: { en: "Pay from credit", ar: "الدفع من الرصيد" },

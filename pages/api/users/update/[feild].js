@@ -22,13 +22,15 @@ export default async (req, res) => {
           switch (feild) {
             case "address":
               const newAddresses = [...user.addresses, { content: body.fadd }];
-              User.findByIdAndUpdate(
+              await User.findByIdAndUpdate(
                 user._id,
                 { addresses: newAddresses },
                 (err) => {
                   return err && res.end("invalid");
                 }
               ).exec();
+              // const dud = User.findById(user._id)
+              // return
               break;
             case "mail":
               User.findByIdAndUpdate(user._id, { mail: body.mail }, (err) => {

@@ -72,7 +72,9 @@ export default function IndexPage() {
             <></>
           )}
         </div>
-        <CategoryItems categories={categoryList} />
+        <div>
+          <CategoryItems categories={categoryList} />
+        </div>
       </div>
       <SnakBar show={snak.show} message={snak.message} />
       <LoadData />
