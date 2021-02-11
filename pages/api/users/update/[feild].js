@@ -28,7 +28,8 @@ export default async (req, res) => {
                 (err) => {
                   return err && res.end("invalid");
                 }
-              ).exec();
+              );
+              // .exec();
               // const dud = User.findById(user._id)
               // return
               break;
