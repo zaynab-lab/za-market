@@ -25,10 +25,10 @@ export default async (req, res) => {
               user._id,
               { addresses: newAddresses },
               (err) => {
-                return err && res.end("invalid");
+                console.log(err);
+                // return err && res.end("invalid");
               }
             ).exec();
-            User.findById(user._id);
             break;
           case "mail":
             User.findByIdAndUpdate(user._id, { mail: body.mail }, (err) => {

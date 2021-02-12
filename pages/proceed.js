@@ -23,7 +23,6 @@ export default function Proceed() {
   const [discount, setDiscount] = useState();
   const [productList, setProductList] = useState([]);
   const [proceedProducts, setProceedProducts] = useState([]);
-  const [payment, setPayment] = useState("عند الإستلام");
   const [selectedAddress, setSelectedAddress] = useState("");
   const [hasAddress, setHasAddress] = useState(false);
   const [snak, setSnak] = useState("");
@@ -61,6 +60,7 @@ export default function Proceed() {
       ar: "تم تسجيل الطلبية بنجاح"
     }
   };
+  const [payment, setPayment] = useState(dictionary.receipt[lang]);
 
   useEffect(() => {
     cartList[0] &&
@@ -110,7 +110,7 @@ export default function Proceed() {
       );
   }, [setProceedProducts, productList, cartList]);
   useEffect(() => {
-    total > 80000 && setDelivery(0);
+    total > 80000 && setDelivery(1000);
   }, [total]);
 
   return (

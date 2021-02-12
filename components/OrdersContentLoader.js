@@ -1,13 +1,20 @@
 import { FaTruck } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
+import Dots from "./Loaders/Dots";
 
 export default function OrdersContentLoader() {
+  const lang = useRecoilValue(langState);
   return (
     <>
       <div className="loading">
-        <div className="loading-title">لا يوجد طلبيات</div>
+        <div className="loading-title">
+          {lang === "en" ? "No Order exist" : "لا يوجد طلبيات"}
+        </div>
         <div className="svg">
           <FaTruck />
+          <Dots />
         </div>
       </div>
 
@@ -33,7 +40,7 @@ export default function OrdersContentLoader() {
         .loading-title {
           font-size: 1.2rem;
           color: ${styles.secondaryColor};
-          opacity: 0;
+          opacity: 100%;
           -webkit-animation-name: title;
           animation-name: title;
           -webkit-animation-duration: 5s;
