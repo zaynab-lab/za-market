@@ -28,9 +28,13 @@ export default async (req, res) => {
                 user.amount - (body.total + body.delivery) > 0
                   ? user.amount - (body.total + body.delivery)
                   : 0;
-              User.findByIdAndUpdate(user._id, { amount: amount }, (err) => {
-                return err && res.end("invalid");
-              }).exec();
+              await User.findByIdAndUpdate(
+                user._id,
+                { amount: amount },
+                (err) => {
+                  return err && res.end("invalid");
+                }
+              ).exec();
             }
             const newOrderCode = orderCode();
 

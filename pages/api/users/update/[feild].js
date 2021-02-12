@@ -28,6 +28,7 @@ export default async (req, res) => {
                 return err && res.end("invalid");
               }
             ).exec();
+            User.findById(user._id);
             break;
           case "mail":
             User.findByIdAndUpdate(user._id, { mail: body.mail }, (err) => {
