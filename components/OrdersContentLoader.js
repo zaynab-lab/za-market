@@ -2,7 +2,6 @@ import { FaTruck } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
 import { langState } from "../pages/menu";
 import { styles } from "../public/js/styles";
-import Dots from "./Loaders/Dots";
 
 export default function OrdersContentLoader() {
   const lang = useRecoilValue(langState);
@@ -14,7 +13,6 @@ export default function OrdersContentLoader() {
         </div>
         <div className="svg">
           <FaTruck />
-          <Dots />
         </div>
       </div>
 
@@ -40,34 +38,6 @@ export default function OrdersContentLoader() {
         .loading-title {
           font-size: 1.2rem;
           color: ${styles.secondaryColor};
-          opacity: 100%;
-          -webkit-animation-name: title;
-          animation-name: title;
-          -webkit-animation-duration: 5s;
-          animation-duration: 5s;
-        }
-        @-webkit-keyframes title {
-          0 {
-            opacity: 0;
-          }
-          80% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 100%;
-          }
-        }
-
-        @keyframes title {
-          0 {
-            opacity: 0;
-          }
-          80% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 100%;
-          }
         }
 
         .svg {

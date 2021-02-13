@@ -17,7 +17,7 @@ export default async (req, res) => {
           if (err) return res.end("invalid");
           const user = await User.findById(decoded.id).exec();
           const orders = await Order.find({ userID: user._id }).exec();
-          return user && res.end(JSON.stringify(orders));
+          return user && res.status(200).end(JSON.stringify(orders));
         });
       } catch (err) {
         return res.end("invalid");

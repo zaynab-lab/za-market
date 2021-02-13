@@ -14,7 +14,7 @@ export default function Offers() {
     shareTowin: { en: "Share link to win", ar: "شارك الرابط وارباح" },
     shareContent: {
       en:
-        "If you share the link to others and they log in, you will give them 10,000 LBP, and if any uses the app, you will get 10,000 LBP as a credit.",
+        "If you share the link with others and they log in, you will give them 10,000 LBP, and if any used the app, you will get 10,000 LBP as a credit.",
       ar:
         "في حال قمت بمشاركة الرابط وتم تسجيل الدخول من قبل المرسل إليه سوف تمنحه 10000 ل.ل وفي حال استعماله للتطبيق سوف تحصل على 10000 ل.ل في رصيدك."
     },
@@ -67,6 +67,8 @@ export default function Offers() {
       const { data } = res;
       if (data !== "noToken" && data !== "invalid") {
         setCode(data.promoCode);
+        setUser(data.invitations ? data.invitations : 0);
+        setOrder(data.activeInvitation ? data.activeInvitation : 0);
       }
     });
   }, [setCode]);
@@ -95,7 +97,7 @@ export default function Offers() {
             )}
             {!order ? (
               user ? (
-                <li>{dictionary.noPurchase}</li>
+                <li>{dictionary.noPurchase[lang]}</li>
               ) : (
                 <></>
               )
@@ -105,7 +107,7 @@ export default function Offers() {
               </li>
             )}
             <li>
-              {dictionary.youhave[lang]} {order * 10000}{" "}
+              {dictionary.youhave[lang]} {order * 5000 + user * 5000}{" "}
               {dictionary.addedToCredit[lang]}
             </li>
           </ul>

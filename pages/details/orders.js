@@ -16,12 +16,14 @@ export default function OrdersPage() {
   };
   const [current, setCurrent] = useState(true);
   const [orderList, setOrderList] = useState([]);
+  const [fetchingDone, setFetchingDone] = useState(false);
 
   useEffect(() => {
     axios.get("/api/orders/user").then((res) => {
       const { data } = res;
       if (data !== "invalid" && data !== "noToken") {
         setOrderList(data);
+        setFetchingDone(true);
       }
     });
   }, [setOrderList]);
@@ -48,7 +50,11 @@ export default function OrdersPage() {
             {dictionary.previous[lang]}
           </div>
         </div>
-        <Orders current={current} orderList={orderList} />
+        <Orders
+          current={current}
+          orderList={orderList}
+          fetchingDone={fetchingDone}
+        />
         <ContactUs />
       </div>
       <style jsx>{`

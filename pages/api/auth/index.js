@@ -28,7 +28,9 @@ export default async function Auth(req, res) {
           birth: user.birth,
           roles: user.roles,
           pages: user.pages,
-          promoCode: user.promoCode
+          promoCode: user.promoCode,
+          invitations: user.invitations,
+          activeInvitations: user.activeInvitations
         })
       );
     });

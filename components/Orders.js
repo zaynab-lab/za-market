@@ -1,12 +1,13 @@
 import { styles } from "../public/js/styles";
 import OrderEnd from "./OrderEnd";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaTruck } from "react-icons/fa";
 import ArrowBar from "./ArrowBar";
 import ContentLoad from "./OrdersContentLoader";
 import { useEffect, useState } from "react";
 import dateChanger from "../util/dateChanger";
 import { useRecoilValue } from "recoil";
 import { langState } from "../pages/menu";
+import Dots from "./Loaders/Dots";
 
 const OrderItem = ({ currentList, index }) => {
   const [hidden, setHidden] = useState(index === 0 ? false : true);
@@ -125,7 +126,7 @@ const OrderItem = ({ currentList, index }) => {
   );
 };
 
-export default function Orders({ current, orderList }) {
+export default function Orders({ current, orderList, fetchingDone }) {
   const [currentList, setCurrentList] = useState([]);
 
   useEffect(() => {
@@ -152,15 +153,32 @@ export default function Orders({ current, orderList }) {
 
   return (
     <>
-      {currentList.length === 0 ? (
-        <ContentLoad />
-      ) : (
-        <>
-          {currentList.map((obj, index) => (
-            <OrderItem key={obj.orderCode} index={index} currentList={obj} />
-          ))}
-        </>
-      )}
+      <div>
+        {currentList.length === 0 ? (
+          fetchingDone ? (
+            <ContentLoad />
+          ) : (
+            <div className="center">
+              <Dots />
+              <FaTruck />
+            </div>
+          )
+        ) : (
+          <>
+            {currentList.map((obj, index) => (
+              <OrderItem key={obj.orderCode} index={index} currentList={obj} />
+            ))}
+          </>
+        )}
+      </div>
+      <style jsx>{`
+        .center {
+          font-size: 3rem;
+          color: grey;
+          text-align: center;
+          margin: 4rem auto;
+        }
+      `}</style>
     </>
   );
 }

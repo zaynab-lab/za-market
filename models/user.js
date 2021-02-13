@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema(
     mail: { type: String },
     promoCode: { type: String },
     invitedBy: { type: String },
+    invitations: { type: Number, default: 0 },
+    activeInvitation: { type: Number, default: 0 },
     addresses: [
       {
         content: { type: String },
