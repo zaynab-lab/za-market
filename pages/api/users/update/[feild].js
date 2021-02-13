@@ -21,7 +21,7 @@ export default async (req, res) => {
         switch (feild) {
           case "address":
             const newAddresses = [...user.addresses, { content: body.fadd }];
-            await User.findByIdAndUpdate(
+            User.findByIdAndUpdate(
               user._id,
               { addresses: newAddresses },
               (err) => {
