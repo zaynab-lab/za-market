@@ -81,7 +81,7 @@ export default function Offers() {
         <div className="promoBox">
           {dictionary.shareContent[lang]}
           <Link
-            href={`whatsapp://send?text=https://www.za-market.com/?code=${encodeURIComponent(
+            href={`whatsapp://send?text=https://www.za-market.com/?code=${btoa(
               code
             )}`}
           >

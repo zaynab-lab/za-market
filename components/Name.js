@@ -42,7 +42,7 @@ export default function Name({ routeTo }) {
   const [name, setName] = useState("");
   const [dots, setDots] = useState(false);
   const invitedBy = localStorage.getItem("invitedBy")
-    ? decodeURIComponent(localStorage.getItem("invitedBy"))
+    ? atob(localStorage.getItem("invitedBy"))
     : "";
 
   const handleClick = () => {
