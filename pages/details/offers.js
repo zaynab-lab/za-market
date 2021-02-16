@@ -66,7 +66,7 @@ export default function Offers() {
     axios.get("/api/auth").then((res) => {
       const { data } = res;
       if (data !== "noToken" && data !== "invalid") {
-        setCode(data.promoCode);
+        setCode(btoa(data.promoCode));
         setUser(data.invitations ? data.invitations : 0);
         setOrder(data.activeInvitation ? data.activeInvitation : 0);
       }
@@ -81,9 +81,7 @@ export default function Offers() {
         <div className="promoBox">
           {dictionary.shareContent[lang]}
           <Link
-            href={`whatsapp://send?text=https://www.za-market.com/?code=${btoa(
-              code
-            )}`}
+            href={`whatsapp://send?text=https://www.za-market.com/?code=${code}`}
           >
             <span className="icon">
               <FaWhatsapp />
