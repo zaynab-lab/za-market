@@ -22,8 +22,10 @@ export default async (req, res) => {
         (err) => console.log(err)
       );
       if (body.invitedBy.length > 0) {
+        let code = atob(body.invitedBy);
+        console.log(code);
         const userInv = await User.findOne({
-          promoCode: atob(body.invitedBy)
+          promoCode: code
         }).exec();
         await User.findByIdAndUpdate(
           userInv._id,

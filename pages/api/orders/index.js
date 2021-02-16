@@ -43,14 +43,18 @@ export default async (req, res) => {
                 return err && res.end("invalid");
               }
             ).exec();
-            if (user.invitedBy > 0 && user.ordertimes > 0) {
+            if (user.invitedBy > 0 && user.ordertimes === 0) {
+              let code = atob(body.invitedBy);
               const userInv = await User.findOne({
-                promoCode: atob(body.invitedBy)
+                promoCode: code
               }).exec();
               await User.findByIdAndUpdate(
                 userInv._id,
                 {
-                  amount: userInv.amount + 5000
+                  amount: userInv.amount + 5000,
+                  activeInvitations: userInv.activeInvitations
+                    ? userInv.activeInvitations + 1
+                    : 1
                 },
                 (err) => console.log(err)
               );
