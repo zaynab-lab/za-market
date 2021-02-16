@@ -40,6 +40,7 @@ export default function IndexPage() {
   const router = useRouter();
   const { msg } = router.query;
   const { code } = router.query;
+  const { qr } = router.query;
 
   useEffect(() => {
     msg && fire(msg);
@@ -50,6 +51,20 @@ export default function IndexPage() {
     code && localStorage.setItem("invitedBy", code);
     code && router.push("/");
   }, [code, router]);
+  useEffect(() => {
+    qr &&
+      fetch("https://api.ipify.org/?format=json")
+        .then((res) => res.json())
+        .then((data) =>
+          axios.post(
+            "/api/qr",
+            { ip: data.ip },
+            { "content-type": "application/json" }
+          )
+        );
+    qr && localStorage.setItem("qr", qr);
+    qr && router.push("/");
+  }, [qr, router]);
 
   return (
     <>

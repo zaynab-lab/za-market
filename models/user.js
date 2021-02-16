@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
     invitedBy: { type: String },
     invitations: { type: Number, default: 0 },
     activeInvitation: { type: Number, default: 0 },
+    qr: { type: Boolean, default: false },
     addresses: [
       {
         content: { type: String },

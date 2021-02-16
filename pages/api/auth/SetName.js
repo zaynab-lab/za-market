@@ -16,7 +16,8 @@ export default async (req, res) => {
         {
           name: body.name,
           invitedBy: body.invitedBy,
-          amount: body.invitedBy.length > 0 ? 10000 : 5000
+          amount: body.invitedBy.length > 0 ? 10000 : 5000,
+          qr: body.qr ? true : false
         },
         (err) => console.log(err)
       );

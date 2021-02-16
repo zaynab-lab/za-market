@@ -44,13 +44,14 @@ export default function Name({ routeTo }) {
   const invitedBy = localStorage.getItem("invitedBy")
     ? atob(localStorage.getItem("invitedBy"))
     : "";
+  const qr = localStorage.getItem("qr") ? 1 : 0;
 
   const handleClick = () => {
     setDots(true);
     axios
       .post(
         "/api/auth/SetName",
-        { phoneNumber, name, invitedBy: invitedBy },
+        { phoneNumber, name, invitedBy: invitedBy, qr },
         { "content-type": "application/json" }
       )
       .then((res) => {
