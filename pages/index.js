@@ -42,10 +42,14 @@ export default function IndexPage() {
   const { code } = router.query;
 
   useEffect(() => {
-    code && localStorage.setItem("invitedBy", code);
     msg && fire(msg);
     msg && router.push("/");
-  }, [code, msg, router]);
+  }, [msg, router]);
+
+  useEffect(() => {
+    code && localStorage.setItem("invitedBy", code);
+    code && router.push("/");
+  }, [code, router]);
 
   return (
     <>

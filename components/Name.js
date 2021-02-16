@@ -41,7 +41,9 @@ export default function Name({ routeTo }) {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [dots, setDots] = useState(false);
-  const invitedBy = localStorage.getItem("invitedBy");
+  const invitedBy = localStorage.getItem("invitedBy")
+    ? decodeURIComponent(localStorage.getItem("invitedBy"))
+    : "";
 
   const handleClick = () => {
     setDots(true);
