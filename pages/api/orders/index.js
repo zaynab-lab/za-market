@@ -36,13 +36,32 @@ export default async (req, res) => {
                 }
               ).exec();
             }
+            await User.findByIdAndUpdate(
+              user._id,
+              { ordertimes: user.ordertimes + 1 },
+              (err) => {
+                return err && res.end("invalid");
+              }
+            ).exec();
+            if (user.invitedBy > 0 && user.ordertimes > 0) {
+              const userInv = await User.findOne({
+                promoCode: atob(body.invitedBy)
+              }).exec();
+              await User.findByIdAndUpdate(
+                userInv._id,
+                {
+                  amount: userInv.amount + 5000
+                },
+                (err) => console.log(err)
+              );
+            }
+
             const newOrderCode = orderCode();
 
             const order = new Order({
               userID: user._id,
               userName: user.name,
               orderCode: newOrderCode,
-              ordertimes: user.ordertimes + 1,
               number: user.number,
               products: body.proceedProducts,
               delivery: body.delivery,
