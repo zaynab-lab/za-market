@@ -10,22 +10,22 @@
   },
   "dependencies": {
     "@google-cloud/storage": "5.7.0",
-    "axios": "0.21.0",
+    "axios": "0.21.1",
     "bcryptjs": "2.4.3",
     "cookie": "0.4.1",
     "formidable": "1.2.2",
     "jsonwebtoken": "8.5.1",
-    "mongoose": "5.11.2",
+    "mongoose": "5.11.16",
     "next": "latest",
-    "next-pwa": "5.0.2",
+    "next-pwa": "5.0.5",
     "node-fetch": "2.6.1",
-    "qs": "6.9.4",
+    "qs": "6.9.6",
     "react": "^16.13.1",
-    "react-content-loader": "5.1.4",
+    "react-content-loader": "6.0.1",
     "react-dom": "^16.13.1",
-    "react-icons": "4.1.0",
+    "react-icons": "4.2.0",
     "recoil": "0.1.2",
-    "twilio": "3.54.0"
+    "twilio": "5.0.0-rc16"
   },
   "peerOptionalDependencies": {
     "mongodb": "^3.6.2"
