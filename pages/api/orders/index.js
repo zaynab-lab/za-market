@@ -30,20 +30,17 @@ export default async (req, res) => {
                   : 0;
               await User.findByIdAndUpdate(
                 user._id,
-                { amount: amount },
-                (err) => {
-                  return err && res.end("invalid");
-                }
+                { amount: amount, ordertimes: user.ordertimes + 1 },
+                (err) => console.log(err)
+              ).exec();
+            } else {
+              await User.findByIdAndUpdate(
+                user._id,
+                { ordertimes: user.ordertimes + 1 },
+                (err) => console.log(err)
               ).exec();
             }
-            await User.findByIdAndUpdate(
-              user._id,
-              { ordertimes: user.ordertimes + 1 },
-              (err) => {
-                return err && res.end("invalid");
-              }
-            ).exec();
-            if (user.invitedBy > 0 && user.ordertimes === 0) {
+            if (user.invitedBy > 0 && user.ordertimes === 1) {
               let code = atob(body.invitedBy);
               const userInv = await User.findOne({
                 promoCode: code
@@ -52,14 +49,13 @@ export default async (req, res) => {
                 userInv._id,
                 {
                   amount: userInv.amount + 5000,
-                  activeInvitations: userInv.activeInvitations
-                    ? userInv.activeInvitations + 1
+                  activeInvitation: userInv.activeInvitation
+                    ? userInv.activeInvitation + 1
                     : 1
                 },
                 (err) => console.log(err)
-              );
+              ).exec();
             }
-
             const newOrderCode = orderCode();
 
             const order = new Order({
@@ -74,7 +70,8 @@ export default async (req, res) => {
               paymentMethod: body.payment,
               address: body.selectedAddress
             });
-            await order.save().catch((err) => console.log(err));
+            await order.save();
+            // .catch((err) => console.log(err));
             return res.status(200).end("done");
           }
           return res.status(200).end("invalid");
