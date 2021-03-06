@@ -10,8 +10,35 @@ import {
   FaTrash
 } from "react-icons/fa";
 import CreateSelect from "./components/CreateSelect";
+import { langState } from "../../pages/menu";
+import { useRecoilValue } from "recoil";
 
 export default function GeneralMPage() {
+  const lang = useRecoilValue(langState);
+  const dictionary = {
+    balance: { en: "SMS Balance", ar: "الرسائل القصيرة" },
+    addCategory: { en: "Add category", ar: "اضافة قسم" },
+    addDeletSubCategory: {
+      en: "Add & Delete subCategory",
+      ar: "إضافة وحذف مجموعة"
+    },
+    chooseCategory: { en: "Choose Category", ar: "اختر قسم" },
+    chooseSubCategory: { en: "Choose SubCategory", ar: "اختر مجموعة" },
+    addSubCategory: { en: "Add subCategory", ar: "اضافة مجموعة" },
+    addRolesPermissions: {
+      en: "Add Roles & Permissions",
+      ar: "اضافة وحذف مجموعة"
+    },
+    chooseRole: { en: "Choose Role", ar: "إختر دور" },
+    addPermission: { en: "Add Permission", ar: "أضف إذن" },
+    rolePermissions: { en: "Role Permission", ar: "أذونات الدور" },
+    customize: { en: "Customize Role to Member", ar: "تخصيص دور للعضو" },
+    chooseMember: { en: "Choose Member", ar: "اختر عضو" },
+    customizeRole: { en: "Customize Role", ar: "تخصيص دور" },
+    memberRoles: { en: "Member Roles: ", ar: "أدوار العضو: " },
+    pages: { en: "Pages: ", ar: "صفحات الوصول: " }
+  };
+
   const [roles, setRoles] = useState("");
   const [state, setState] = useState({
     name: "",
@@ -30,7 +57,7 @@ export default function GeneralMPage() {
   const [usersList, setUsersList] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [currentUser, setCurrentUser] = useState({});
-  const [productsCount, setProductsCount] = useState("");
+  const [balance, setBalance] = useState("");
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -82,13 +109,12 @@ export default function GeneralMPage() {
     const user = usersList.filter((user) => user.name === selectedUser)[0];
     if (user) {
       setCurrentUser(user);
-      axios
-        .get(`/api/products/byCreator?code=${user.promoCode}`)
-        .then((res) => {
-          setProductsCount(res.data);
-        });
     }
   }, [selectedUser, setCurrentUser, usersList]);
+
+  useEffect(() => {
+    axios.get("/api/balance").then((res) => setBalance(res.data));
+  }, []);
 
   return (
     <>
@@ -96,11 +122,14 @@ export default function GeneralMPage() {
         <div className="container">
           {/* //////////////addCategory///////// */}
           <div className="section">
+            {dictionary.balance[lang]}: {balance}
+          </div>
+          <div className="section">
             <div
               className="title"
               onClick={() => setSection({ ...section, n1: !section.n1 })}
             >
-              اضافة قسم
+              {dictionary.addCategory[lang]}
             </div>
             {section.n1 && (
               <>
@@ -142,7 +171,7 @@ export default function GeneralMPage() {
                         : alert("املء الفراغات اللازمة");
                     }}
                   >
-                    اضافة قسم
+                    {dictionary.addCategory[lang]}
                   </button>
                 </div>
               </>
@@ -156,14 +185,14 @@ export default function GeneralMPage() {
               className="title"
               onClick={() => setSection({ ...section, n2: !section.n2 })}
             >
-              اضافة وحذف مجموعة
+              {dictionary.addDeletSubCategory[lang]}
             </div>
             {section.n2 && (
               <>
                 <CreateSelect
                   initOptions={categoryList}
                   name={"category"}
-                  placeholder={"اختر قسم"}
+                  placeholder={dictionary.chooseCategory[lang]}
                   setSelect={setSelectedCategory}
                 />
                 <div className="addCategory-comb">
@@ -173,7 +202,9 @@ export default function GeneralMPage() {
                       setState({ ...state, subCategory: e.target.value })
                     }
                   >
-                    <option value="">اختر المجموعة</option>
+                    <option value="">
+                      {dictionary.chooseSubCategory[lang]}
+                    </option>
                     {subCategoryList.map((obj, index) => (
                       <option key={index} value={obj}>
                         {obj}
@@ -237,7 +268,7 @@ export default function GeneralMPage() {
                           );
                     }}
                   >
-                    اضافة مجموعة
+                    {dictionary.addSubCategory[lang]}
                   </button>
                 </div>
               </>
@@ -250,7 +281,7 @@ export default function GeneralMPage() {
               className="title"
               onClick={() => setSection({ ...section, n3: !section.n3 })}
             >
-              اضافة دور وأذونات
+              {dictionary.addRolesPermissions[lang]}
             </div>
             {section.n3 && (
               <>
@@ -259,19 +290,19 @@ export default function GeneralMPage() {
                     initOptions={rolesList}
                     url={"/api/roles"}
                     name={"role"}
-                    placeholder={"اختر دور"}
+                    placeholder={dictionary.chooseRole[lang]}
                     setSelect={setSelectedRole}
                   />
                   <CreateSelect
                     initOptions={permissionsList}
                     url={"/api/permissions"}
                     name={"permission"}
-                    placeholder={"أضف إذن"}
+                    placeholder={dictionary.addPermission[lang]}
                     setSelect={setSelectedPermission}
                   />
                 </div>
                 <div>
-                  أذونات الدور:{" "}
+                  {dictionary.rolePermissions[lang]}:{" "}
                   <el>
                     {rolePermissions.map((perm) => (
                       <li>{perm}</li>
@@ -321,7 +352,7 @@ export default function GeneralMPage() {
               className="title"
               onClick={() => setSection({ ...section, n4: !section.n4 })}
             >
-              تخصيص دور للعضو
+              {dictionary.customize[lang]}
             </div>
 
             {section.n4 && (
@@ -330,40 +361,30 @@ export default function GeneralMPage() {
                   <CreateSelect
                     initOptions={usersList.map((user) => user.name)}
                     name={"role"}
-                    placeholder={"اختر عضو"}
+                    placeholder={dictionary.chooseMember[lang]}
                     setSelect={setSelectedUser}
                   />
 
                   <CreateSelect
                     initOptions={rolesList}
                     name={"role"}
-                    placeholder={"تخصيص دور"}
+                    placeholder={dictionary.customizeRole[lang]}
                     setSelect={setSelectedRole}
                   />
                 </div>
                 <div className="column">
                   <div>
-                    الإضافات: <el>{productsCount}</el>
-                  </div>
-                  <div>
-                    المستحقات: <el>{productsCount * 600}</el>
-                  </div>
-                </div>
-                <div className="column">
-                  <div>
-                    أدوار العضو:{" "}
+                    {dictionary.memberRoles[lang]}
                     <el>
                       {currentUser.roles &&
                         currentUser.roles
-
                           .filter((role) => role !== "customer")
-
                           .map((role) => <li>{role}</li>)}
                     </el>
                   </div>
 
                   <div>
-                    صفحات الوصول:
+                    {dictionary.pages[lang]}
                     <el>
                       {currentUser.pages &&
                         currentUser.pages.map((role) => <li>{role}</li>)}
@@ -414,7 +435,7 @@ export default function GeneralMPage() {
               <FaArrowUp />
             </span>
           </div>
-          <div className="mergeSec">
+          {/* <div className="mergeSec">
             <span
               className="mergebtn"
               onClick={() =>
@@ -433,7 +454,7 @@ export default function GeneralMPage() {
               Upload products
               <FaArrowUp />
             </span>
-          </div>
+          </div> */}
         </div>
       )}
 

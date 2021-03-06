@@ -48,8 +48,9 @@ export default async (req, res) => {
           process.env.SMS_URL +
             "to=" +
             receptor +
-            "&message=https://za-market.com your activation code is: " +
-            otp
+            "&message=your activation code is: " +
+            otp +
+            " https://za-market.com"
         );
         // .then((response) => {
         //   return response.data.REQUEST_RESULT === 200;
