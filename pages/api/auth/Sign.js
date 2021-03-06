@@ -1,11 +1,8 @@
 import dbConnection from "../../../util/dbConnection";
 import User from "../../../models/user";
 
-// import twilio from "twilio";
 import { codeGenerator, OTPGenerator } from "../../../util/codeGenerator";
 import axios from "axios";
-
-// const client = twilio(process.env.TWILIO_ACSID, process.env.TWILIO_AUTH_TOKEN);
 
 dbConnection();
 
@@ -25,7 +22,7 @@ export default async (req, res) => {
           const min = 2 - (d - user.date) / 60000;
           if (min < 2 && min > 0) {
             var mins = Math.ceil(min);
-            return res.end(`retry Loging after ${mins} min.`);
+            return res.end(`Retry Loging after ${mins} min.`);
           } else {
             await User.findByIdAndUpdate(
               user._id,
@@ -47,21 +44,17 @@ export default async (req, res) => {
           createdUser.save().catch((err) => console.log(err));
         }
         const receptor = "961" + body.phoneNumber;
-        axios
-          .get(
-            process.env.SMS_URL +
-              "to=" +
-              receptor +
-              "&message=https://za-market.com your activation code is: " +
-              otp
-          )
-          .then((response) => {
-            return response.data.REQUEST_RESULT === 200;
-          });
+        await axios.get(
+          process.env.SMS_URL +
+            "to=" +
+            receptor +
+            "&message=https://za-market.com your activation code is: " +
+            otp
+        );
+        // .then((response) => {
+        //   return response.data.REQUEST_RESULT === 200;
+        // });
         return res.end("done");
-        // client.verify
-        //   .services(process.env.VA_SID)
-        //   .verifications.create({ to: receptor, channel: "sms" });
       } else {
         res.end("please, enter the phone number correctly");
       }
