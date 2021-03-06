@@ -38,7 +38,7 @@ export default function PhoneOTP({ routeTo }) {
       ar: "تسجيل الدخول"
     },
     requestOtp: {
-      en: "Request OTP",
+      en: "Request code",
       ar: "طلب الرمز المؤقت"
     },
     have: {
@@ -50,7 +50,7 @@ export default function PhoneOTP({ routeTo }) {
       ar: "ليس لدي الرمز الخاص بي"
     },
     requestAgain: {
-      en: "Request OTP again",
+      en: "Request code again",
       ar: "طلب الرمز مجدداً"
     }
   };
@@ -99,13 +99,6 @@ export default function PhoneOTP({ routeTo }) {
             timer(119, setTime);
             setphone(phoneNumber);
             setDots(false);
-            axios
-              .post(
-                "/api/auth/Login",
-                { phoneNumber, oTP },
-                { "content-type": "application/json" }
-              )
-              .then((res) => console.log(res));
           } else {
             setMessage(res.data);
           }

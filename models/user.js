@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     signDate: { type: Date, default: Date.now },
     otptimes: { type: Number },
+    otp: { type: String },
     ordertimes: { type: Number, default: 0 },
     workingtimes: { type: Number, default: 1 },
     pages: { type: [String], default: [] },

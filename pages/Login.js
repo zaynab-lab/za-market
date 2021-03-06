@@ -6,6 +6,7 @@ import TopBar from "../components/TopBar";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
 import Loader from "../components/Loader";
+import { langState } from "./menu";
 
 export const PhonePageState = atom({
   key: "phonePage",
@@ -17,6 +18,8 @@ export default function Login() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { routeTo } = router.query;
+  const lang = useRecoilValue(langState);
+  const dictionary = { login: { en: "Log in", ar: "تسجيل الدخول" } };
 
   useEffect(() => {
     axios.get("/api/auth").then((res) => {
@@ -31,7 +34,7 @@ export default function Login() {
 
   return (
     <>
-      <TopBar title="تسجيل الدخول" page={false} />
+      <TopBar title={dictionary.login[lang]} page={false} />
       {loading && <Loader />}
       {!loading && (
         <div className="container">
