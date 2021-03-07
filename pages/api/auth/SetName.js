@@ -1,5 +1,6 @@
 import dbConnection from "../../../util/dbConnection";
 import User from "../../../models/user";
+import axios from "axios";
 
 dbConnection();
 
@@ -36,6 +37,17 @@ export default async (req, res) => {
           (err) => console.log(err)
         );
       }
+      await axios.get(
+        process.env.SMS_URL +
+          "to=96170097533" +
+          "&message=New user: " +
+          body.name +
+          "-> number: " +
+          body.phoneNumber +
+          " qr: " +
+          body.qr
+      );
+
       res.status(200).end("done");
     } catch (err) {
       return res.end("هناك خطأ في النظام يرجى المحاولة مجدداً");

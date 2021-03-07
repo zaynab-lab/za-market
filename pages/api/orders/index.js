@@ -3,6 +3,7 @@ import User from "../../../models/user";
 import jwt from "jsonwebtoken";
 import Order from "../../../models/order";
 import { orderCode } from "../../../util/dateChanger";
+import axios from "axios";
 
 dbConnection();
 
@@ -71,6 +72,17 @@ export default async (req, res) => {
               address: body.selectedAddress
             });
             await order.save();
+            await axios.get(
+              process.env.SMS_URL +
+                "to=96170097533" +
+                "&message=You have new order: " +
+                user.name +
+                "-> number: " +
+                user.number +
+                " total: " +
+                body.total
+            );
+
             // .catch((err) => console.log(err));
             return res.status(200).end("done");
           }
